@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 instance/
 migrations/versions/*.pyc
+app/static/uploadsq

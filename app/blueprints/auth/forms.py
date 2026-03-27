@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class RegistrationForm(FlaskForm):
@@ -11,11 +13,11 @@ class RegistrationForm(FlaskForm):
         DataRequired(),
         Email()
     ])
-    password = StringField('Password', validators=[
+    password = PasswordField('Password', validators=[
         DataRequired(),
         Length(min=12, max=128)
     ])
-    confirm_password = StringField('Confirm Password', validators=[
+    confirm_password = PasswordField('Confirm Password', validators=[
         DataRequired(),
         EqualTo('password', message='Passwords must match')
     ])
@@ -26,7 +28,26 @@ class LoginForm(FlaskForm):
         DataRequired(),
         Email()
     ])
-    password = StringField('Password', validators=[
+    password = PasswordField('Password', validators=[
         DataRequired()
     ])
     submit = SubmitField('Login')
+
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField('Current Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[
+        DataRequired(),
+        Length(min=8, max=128)
+    ])
+    confirm_password = PasswordField('Confirm Password', validators=[
+        DataRequired(),
+        EqualTo('new_password', message='Passwords must match')
+    ])
+    submit = SubmitField('Change Password')
+
+class UpdateProfilePictureForm(FlaskForm):
+    picture = FileField('Profile Picture', validators=[
+        DataRequired(),
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
+    ])
+    submit = SubmitField('Update Profile Picture')
