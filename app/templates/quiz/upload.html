@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Question Bank - Provr{% endblock %}
+
+{% block content %}
+<h2>Upload Question Bank</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div>
+        {{ form.name.label }}
+        {{ form.name(placeholder="Bank name") }}
+        {% for error in form.name.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form.file.label }}
+        {{ form.file() }}
+        {% for error in form.file.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    {{ form.submit() }}
+</form>
+
+<p>Need help formatting your file? Check the <a href="#">format guide</a>.</p>
+<a href="{{ url_for('quiz.list_banks') }}">Back to My Banks</a>
+{% endblock %}

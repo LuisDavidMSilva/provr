@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}My Question Banks - Provr{% endblock %}
+
+{% block content %}
+<h2>My Question Banks</h2>
+
+<a href="{{ url_for('quiz.upload') }}">Upload New Bank</a>
+
+{% if banks %}
+    <ul>
+        {% for bank in banks %}
+            <li>
+                <strong>{{ bank.name }}</strong>
+                — {{ bank.questions|length }} questions
+                — created {{ bank.created_at.strftime('%Y-%m-%d') }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no question banks yet. <a href="{{ url_for('quiz.upload') }}">Upload one now</a>.</p>
+{% endif %}
+
+<a href="{{ url_for('quiz.index') }}">Back to Dashboard</a>
+{% endblock %}
