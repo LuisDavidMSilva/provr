@@ -13,7 +13,7 @@ class RegistrationForm(FlaskForm):
     ])
     password = StringField('Password', validators=[
         DataRequired(),
-        Length(min=8)
+        Length(min=12, max=128)
     ])
     confirm_password = StringField('Confirm Password', validators=[
         DataRequired(),
