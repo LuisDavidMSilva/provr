@@ -199,3 +199,22 @@ def result():
                            quiz_session=quiz_session,
                            answers=answers,
                            score=score)
+
+
+@quiz_bp.route('/history')
+@login_required
+def history():
+    sessions = QuizSession.query.filter_by(user_id=current_user.id).order_by(QuizSession.started_at.desc()).all()
+    return render_template('quiz/history.html', sessions=sessions)
+
+
+@quiz_bp.route('/history/<int:session_id>')
+@login_required
+def history_detail(session_id):
+    quiz_session = QuizSession.query.get_or_404(session_id)
+    if quiz_session.user_id != current_user.id:
+        flash('Access denied.', 'danger')
+        return redirect(url_for('quiz.history'))
+
+    answers = QuizAnswer.query.filter_by(session_id=session_id).all()
+    return render_template('quiz/history_detail.html', quiz_session=quiz_session, answers=answers, score=quiz_session.score)

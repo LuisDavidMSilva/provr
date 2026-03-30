@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}History - Provr{% endblock %}
+
+{% block content %}
+<h2>Quiz History</h2>
+
+{% if sessions %}
+    <ul>
+        {% for s in sessions %}
+            <li>
+                <strong>{{ s.bank.name }}</strong>
+                — Score: {{ s.score }}/{{ s.total }}
+                — {{ s.started_at.strftime('%Y-%m-%d %H:%M') }}
+                {% if s.time_limit > 0 %}
+                    — Time limit: {{ (s.time_limit // 60) }} min
+                {% else %}
+                    — No time limit
+                {% endif %}
+                <a href="{{ url_for('quiz.session_detail', session_id=s.id) }}">View details</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No quiz sessions yet. <a href="{{ url_for('quiz.list_banks') }}">Start your first quiz</a>.</p>
+{% endif %}
+
+<a href="{{ url_for('quiz.index') }}">Back to Dashboard</a>
+{% endblock %}
