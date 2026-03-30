@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Configure Quiz - Provr{% endblock %}
+
+{% block content %}
+<h2>Configure Quiz — {{ bank.name }}</h2>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div>
+        {{ form.quantity.label }}
+        {{ form.quantity(placeholder="Number of questions") }}
+        {% for error in form.quantity.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form.level.label }}
+        {{ form.level() }}
+        {% for error in form.level.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    <div>
+        {{ form.time_limit.label }}
+        {{ form.time_limit() }}
+        {% for error in form.time_limit.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    </div>
+
+    {{ form.submit() }}
+</form>
+
+<a href="{{ url_for('quiz.list_banks') }}">Back to My Banks</a>
+{% endblock %}
