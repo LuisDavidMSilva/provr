@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from app import db
 
 class QuestionBank(db.Model):
-    __tablename__ = 'questions_banks'
+    __tablename__ = 'question_banks'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -24,7 +24,7 @@ class Question(db.Model):
     topic =  db.Column(db.String(100), nullable=False)
     alternatives = db.Column(db.JSON, nullable=False)
     correct_answer = db.Column(db.String(10), nullable=False)
-    bank_id =  db.Column(db.Integer, db.ForeignKey('questions_banks.id'), nullable=False)
+    bank_id =  db.Column(db.Integer, db.ForeignKey('question_banks.id'), nullable=False)
 
 
     def __repr__(self):
