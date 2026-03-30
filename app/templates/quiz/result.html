@@ -14,11 +14,25 @@
     {% for answer in answers %}
         <li>
             <strong>{{ answer.question.text }}</strong><br>
-            Your answer: {{ answer.selected_answer }}
+
+            {% set selected_text = namespace(value='') %}
+            {% for alt in answer.question.alternatives %}
+                {% if alt.startswith(answer.selected_answer + ')') %}
+                    {% set selected_text.value = alt %}
+                {% endif %}
+            {% endfor %}
+
+            Your answer: {{ selected_text.value }}
+
             {% if answer.is_correct %}
                 ✅
             {% else %}
-                ❌ Correct: {{ answer.question.correct_answer }}
+                ❌ Correct:
+                {% for alt in answer.question.alternatives %}
+                    {% if alt.startswith(answer.question.correct_answer + ')') %}
+                        {{ alt }}
+                    {% endif %}
+                {% endfor %}
             {% endif %}
         </li>
     {% endfor %}
