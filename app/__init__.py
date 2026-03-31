@@ -1,5 +1,4 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, redirect, url_for
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -18,7 +17,7 @@ def create_app(config_name='development'):
         
     }
     app.config.from_object(config_map.get(config_name, 'config.DevelopmentConfig'))
-    
+
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
@@ -37,5 +36,9 @@ def create_app(config_name='development'):
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(quiz_bp, url_prefix='/quiz')
     app.register_blueprint(admin_bp, url_prefix='/admin')
+
+    @app.route('/')
+    def index():
+        return redirect(url_for('auth.login'))
 
     return app
