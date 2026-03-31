@@ -9,11 +9,16 @@ migrate = Migrate()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 
-def create_app():
+def create_app(config_name='development'):
     app = Flask(__name__)
-    app.config.from_object('config.DevelopmentConfig')
 
-
+    config_map = {
+        'development': 'config.DevelopmentConfig',
+        'production': 'config.ProductionConfig',
+        
+    }
+    app.config.from_object(config_map.get(config_name, 'config.DevelopmentConfig'))
+    
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
