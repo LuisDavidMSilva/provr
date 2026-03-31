@@ -8,7 +8,7 @@
 <a href="{{ url_for('quiz.upload') }}">Upload New Bank</a>
 
 {% if banks %}
-    <ul>
+    <ul class="card-list">
         {% for bank in banks %}
             <li>
                 <strong>{{ bank.name }}</strong>

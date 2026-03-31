@@ -5,19 +5,15 @@
 {% block content %}
 <p>Question {{ current }} of {{ total }}</p>
 
-{% if quiz_session_id %}
-    {% set session_obj = quiz_session_id | int %}
-{% endif %}
+<p>⏱ Time Remaining: <span id="timer" data-limit="{{ time_limit }}" data-started="{{ started_at_ts }}"></span></p>
 
-<div id="timer"></div>
-
-<h3>{{ question.text }}</h3>
+<h3 class="question-text">{{ question.text }}</h3>
 
 <form method="POST">
     {{ form.hidden_tag() }}
 
     {% for alternative in question.alternatives %}
-        <div>
+        <div class="alternative-item">
             <input type="radio" name="answer" value="{{ alternative[0] }}" id="alt_{{ loop.index }}">
             <label for="alt_{{ loop.index }}">{{ alternative }}</label>
         </div>

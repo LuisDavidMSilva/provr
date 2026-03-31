@@ -6,10 +6,10 @@
 <h2>Quiz History</h2>
 
 {% if sessions %}
-    <ul>
+    <ul class="card-list">
         {% for s in sessions %}
             <li>
-                <strong>{{ s.bank.name }}</strong>
+                <strong>{{ s.bank.name if s.bank else 'Deleted Bank' }}</strong>
                 — Score: {{ s.score }}/{{ s.total }}
                 — {{ s.started_at.strftime('%Y-%m-%d %H:%M') }}
                 {% if s.time_limit > 0 %}
