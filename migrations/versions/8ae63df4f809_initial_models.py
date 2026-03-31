@@ -1,8 +1,8 @@
 """initial models
 
-Revision ID: 7137b963a08a
+Revision ID: 8ae63df4f809
 Revises: 
-Create Date: 2026-03-29 22:35:02.380571
+Create Date: 2026-03-30 22:45:35.416402
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7137b963a08a'
+revision = '8ae63df4f809'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -51,10 +51,10 @@ def upgrade():
     op.create_table('quiz_sessions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('bank_id', sa.Integer(), nullable=False),
+    sa.Column('bank_id', sa.Integer(), nullable=True),
     sa.Column('score', sa.Integer(), nullable=True),
     sa.Column('total', sa.Integer(), nullable=False),
-    sa.Column('time_limit', sa.Integer(), nullable=False),
+    sa.Column('time_limit', sa.Integer(), nullable=True),
     sa.Column('started_at', sa.DateTime(), nullable=True),
     sa.Column('finished_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['bank_id'], ['question_banks.id'], ),
@@ -64,10 +64,10 @@ def upgrade():
     op.create_table('quiz_answers',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('session_id', sa.Integer(), nullable=False),
-    sa.Column('question_id', sa.Integer(), nullable=False),
+    sa.Column('question_id', sa.Integer(), nullable=True),
     sa.Column('selected_answer', sa.String(length=10), nullable=False),
     sa.Column('is_correct', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['question_id'], ['questions.id'], ),
+    sa.ForeignKeyConstraint(['question_id'], ['questions.id'], ondelete='SET NULL'),
     sa.ForeignKeyConstraint(['session_id'], ['quiz_sessions.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

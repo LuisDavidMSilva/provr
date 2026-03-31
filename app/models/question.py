@@ -9,7 +9,7 @@ class QuestionBank(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-    questions = db.relationship('Question', backref='bank', lazy=True) 
+    questions = db.relationship('Question', backref='bank', lazy=True, cascade='all, delete-orphan') 
     owner = db.relationship('User', backref='banks')
 
     def __repr__(self):

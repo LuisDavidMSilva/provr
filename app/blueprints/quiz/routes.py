@@ -124,6 +124,7 @@ def configure(bank_id):
         session['quiz_session_id'] = quiz_session.id
         session['question_ids'] = [q.id for q in selected]
         session['current_index'] = 0
+        session['time_limit'] = time_limit
 
         db.session.commit()
         return redirect(url_for('quiz.take'))
@@ -137,10 +138,18 @@ def take():
     quiz_session_id = session.get('quiz_session_id')
     question_ids = session.get('question_ids')
     current_index = session.get('current_index', 0)
+    time_limit = session.get('time_limit')
 
     if not quiz_session_id or not question_ids:
         flash('No active quiz session.', 'danger')
         return redirect(url_for('quiz.list_banks'))
+
+    quiz_session = QuizSession.query.get(quiz_session_id)
+    if not quiz_session:
+        flash('Quiz session not found.', 'danger')
+        return redirect(url_for('quiz.list_banks'))
+
+    started_at_ts = int(quiz_session.started_at.replace(tzinfo=timezone.utc).timestamp())
 
     if current_index >= len(question_ids):
         return redirect(url_for('quiz.result'))
@@ -171,9 +180,12 @@ def take():
     return render_template('quiz/take.html',
                            form=form,
                            question=question,
+                           time_limit=time_limit,
+                           quiz_session=quiz_session,
                            current=current_index + 1,
                            total=len(question_ids),
-                           quiz_session_id=quiz_session_id)
+                           quiz_session_id=quiz_session_id,
+                           started_at_ts=started_at_ts)
 
 
 @quiz_bp.route('/result')

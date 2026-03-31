@@ -12,6 +12,13 @@ from PIL import Image
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        if User.query.filter_by(email=form.email.data).first():
+            flash('Email already registered. Please log in.', 'danger')
+            return redirect(url_for('auth.login'))
+        if User.query.filter_by(username=form.username.data).first():
+            flash('Username already taken. Please choose another.', 'danger')
+            return redirect(url_for('auth.register'))
+        
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(
             username=form.username.data,

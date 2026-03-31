@@ -19,6 +19,8 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Please log in to access this page.'
+    login_manager.login_message_category = 'danger'
     
     with app.app_context():
         from app.models import user, question, quiz
