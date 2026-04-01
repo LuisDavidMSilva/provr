@@ -1,5 +1,7 @@
 # Provr
 
+A web-based test application platform. Create accounts, upload question banks, take timed quizzes by difficulty level, and track your performance history.
+
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Flask](https://img.shields.io/badge/Flask-3.x-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -7,11 +9,33 @@
 ![Closed Issues](https://img.shields.io/github/issues-closed/LuisDavidMSilva/provr)
 ![Last Commit](https://img.shields.io/github/last-commit/LuisDavidMSilva/provr)
 
+## How to use
+
+1. Create an account at [provr.luishomelab.tec.br](https://provr.luishomelab.tec.br)
+2. Generate a question bank using any AI chatbot with the prompt below
+3. Save as `.json` or `.txt` and upload in **My Banks**
+4. Configure your quiz — quantity, level and time limit
+5. Start and track your results in **My Results**
+
+### Question bank prompt template
+```
+Generate a question bank about [TOPIC] with [N] questions in JSON format:
+[
+  {
+    "text": "Question text",
+    "level": "easy|medium|hard",
+    "topic": "topic name",
+    "alternatives": ["A) ...", "B) ...", "C) ...", "D) ..."],
+    "correct_answer": "A"
+  }
+]
+Return ONLY the JSON array, no additional text.
+```
+
 ## Live Demo
 
 [provr.luishomelab.tec.br](https://provr.luishomelab.tec.br)
 
-A web-based test application platform. Create accounts, upload question banks, take timed quizzes by difficulty level, and track your performance history.
 
 ## Stack
 

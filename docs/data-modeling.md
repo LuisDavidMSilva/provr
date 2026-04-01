@@ -27,8 +27,16 @@ erDiagram
         int bank_id FK
     }
 
+    QUIZ_ANSWER {
+        int id FK
+        int session_id FK
+        int question_id FK
+        string selected_answer
+        boolean is_correct
+    }
+
     QUIZ_SESSION {
-        int id PK
+        int id FK
         int user_id FK
         int bank_id FK
         int score
@@ -40,6 +48,8 @@ erDiagram
 
     USER ||--o{ QUESTION_BANK : "owns"
     USER ||--o{ QUIZ_SESSION : "takes"
+    QUESTION ||--o{ QUIZ_ANSWER : "answered in"
+    QUIZ_SESSION ||--o{ QUIZ_ANSWER : "contains"
     QUESTION_BANK ||--o{ QUESTION : "contains"
     QUESTION_BANK ||--o{ QUIZ_SESSION : "used in"
 ```
