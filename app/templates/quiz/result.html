@@ -5,15 +5,9 @@
 {% block content %}
 <h2>Quiz Result</h2>
 
-<p>Score: <strong class="result-score">{{ score }}/{{ quiz_session.total }}</strong></p>
+<p>Score: <strong class="result-score">{{ score if score is not none else '—' }}/{{ quiz_session.total }}</strong></p>
 <p>Started: {{ quiz_session.started_at.strftime('%Y-%m-%d %H:%M') }}</p>
-<p>Finished: 
-    {% if quiz_session.finished_at %}
-        {{ quiz_session.finished_at.strftime('%Y-%m-%d %H:%M') }}
-    {% else %}
-        Incomplete
-    {% endif %}
-</p>
+<p>Finished: {{ quiz_session.finished_at.strftime('%Y-%m-%d %H:%M') if quiz_session.finished_at else 'Not finished' }}</p>
 
 <h3>Review</h3>
 <ul class="review-list">
