@@ -1,6 +1,6 @@
 import json
 import random
-from datetime import datetime, timezone
+from datetime import datetime, time, timezone
 from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import login_required, current_user
 from app import db
@@ -125,6 +125,7 @@ def configure(bank_id):
         session['question_ids'] = [q.id for q in selected]
         session['current_index'] = 0
         session['time_limit'] = time_limit
+        session['started_at_ts'] = int(time.time())
 
         db.session.commit()
         return redirect(url_for('quiz.take'))
@@ -139,8 +140,10 @@ def take():
     question_ids = session.get('question_ids')
     current_index = session.get('current_index', 0)
     time_limit = session.get('time_limit')
+    
+    started_at_ts = session.get('started_at_ts') 
 
-    if not quiz_session_id or not question_ids:
+    if not quiz_session_id or not question_ids or not started_at_ts:
         flash('No active quiz session.', 'danger')
         return redirect(url_for('quiz.list_banks'))
 
@@ -148,8 +151,6 @@ def take():
     if not quiz_session:
         flash('Quiz session not found.', 'danger')
         return redirect(url_for('quiz.list_banks'))
-
-    started_at_ts = int(quiz_session.started_at.replace(tzinfo=timezone.utc).timestamp())
 
     if current_index >= len(question_ids):
         return redirect(url_for('quiz.result'))
@@ -159,12 +160,10 @@ def take():
 
     if form.validate_on_submit():
         if time_limit and time_limit > 0:
-            now_ts = int(datetime.now(timezone.utc).timestamp())
+            now_ts = int(time.time())
             elapsed = now_ts - started_at_ts
-
-            time_limit_seconds = time_limit * 60
             
-            if elapsed > (time_limit_seconds + 5):
+            if elapsed > (time_limit + 5):
                 flash('Time is up! Your quiz was automatically submitted.', 'warning')
                 return redirect(url_for('quiz.result'))
 
