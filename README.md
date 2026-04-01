@@ -1,8 +1,15 @@
 # Provr
 
-![Python](https://img.shields.io/badge/Python-3.14-blue)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Flask](https://img.shields.io/badge/Flask-3.x-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![Issues](https://img.shields.io/github/issues/LuisDavidMSilva/provr)
+![Closed Issues](https://img.shields.io/github/issues-closed/LuisDavidMSilva/provr)
+![Last Commit](https://img.shields.io/github/last-commit/LuisDavidMSilva/provr)
+
+## Live Demo
+
+[provr.luishomelab.tec.br](https://provr.luishomelab.tec.br)
 
 A web-based test application platform. Create accounts, upload question banks, take timed quizzes by difficulty level, and track your performance history.
 
