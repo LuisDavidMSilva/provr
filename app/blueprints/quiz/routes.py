@@ -125,7 +125,7 @@ def configure(bank_id):
         session['question_ids'] = [q.id for q in selected]
         session['current_index'] = 0
         session['time_limit'] = time_limit
-        session['started_at_ts'] = int(time.time())
+        session['started_at_ts'] = int(datetime.now(timezone.utc).timestamp())
 
         db.session.commit()
         return redirect(url_for('quiz.take'))
@@ -160,7 +160,7 @@ def take():
 
     if form.validate_on_submit():
         if time_limit and time_limit > 0:
-            now_ts = int(time.time())
+            now_ts = int(datetime.now(timezone.utc).timestamp())
             elapsed = now_ts - started_at_ts
             
             if elapsed > (time_limit + 5):
