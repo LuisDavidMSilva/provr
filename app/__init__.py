@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
@@ -41,5 +41,9 @@ def create_app(config_name='development'):
     @app.route('/')
     def index():
         return redirect(url_for('auth.login'))
+    
+    @app.route('/terms')
+    def terms():
+        return render_template('terms.html')
 
     return app

@@ -39,6 +39,15 @@
             <span>{{ error }}</span>
         {% endfor %}
     </div>
+    
+    <div>
+        {{ form.terms() }} 
+        {{ form.terms.label }} 
+        — <a href="{{ url_for('terms') }}" target="_blank">Read Terms of Use</a>
+        {% for error in form.terms.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    </div>
 
     {{ form.submit() }}
 </form>

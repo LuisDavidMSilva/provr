@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import BooleanField, StringField, SubmitField
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields.simple import PasswordField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 
 class RegistrationForm(FlaskForm):
     username = StringField('UserName', validators=[
@@ -21,6 +21,7 @@ class RegistrationForm(FlaskForm):
         DataRequired(),
         EqualTo('password', message='Passwords must match')
     ])
+    terms = BooleanField('I agree to the Terms of Use', validators=[DataRequired()])
     submit = SubmitField('Create Account')
 
 class LoginForm(FlaskForm):
