@@ -28,7 +28,7 @@ erDiagram
     }
 
     QUIZ_ANSWER {
-        int id FK
+        int id PK
         int session_id FK
         int question_id FK
         string selected_answer
@@ -36,7 +36,7 @@ erDiagram
     }
 
     QUIZ_SESSION {
-        int id FK
+        int id PK
         int user_id FK
         int bank_id FK
         int score
