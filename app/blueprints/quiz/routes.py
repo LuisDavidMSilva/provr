@@ -149,6 +149,7 @@ def take():
         flash('Quiz session not found.', 'danger')
         return redirect(url_for('quiz.list_banks'))
 
+    # Garante que o timestamp base seja UTC
     started_at_ts = int(quiz_session.started_at.replace(tzinfo=timezone.utc).timestamp())
 
     if current_index >= len(question_ids):
@@ -158,6 +159,14 @@ def take():
     form = AnswerForm()
 
     if form.validate_on_submit():
+        if time_limit and time_limit > 0:
+            now_ts = int(datetime.now(timezone.utc).timestamp())
+            elapsed = now_ts - started_at_ts
+            
+            if elapsed > (time_limit + 5):
+                flash('Time is up! Your quiz was automatically submitted.', 'warning')
+                return redirect(url_for('quiz.result'))
+
         selected = request.form.get('answer')
         if not selected:
             flash('Please select an answer.', 'danger')
