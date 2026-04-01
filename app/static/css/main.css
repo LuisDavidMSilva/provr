@@ -40,6 +40,14 @@ a:hover {
 }
 
 /* ===== NAVBAR ===== */
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+}
+
 .navbar {
     display: flex;
     align-items: center;

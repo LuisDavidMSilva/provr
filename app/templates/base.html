@@ -18,6 +18,8 @@
             <a href="{{ url_for('quiz.list_banks') }}">My Banks</a>
             <a href="{{ url_for('quiz.history') }}">My Results</a>
             <a href="{{ url_for('auth.logout') }}">Logout</a>
+            <img src="{{ url_for('static', filename=current_user.profile_picture) if current_user.profile_picture else url_for('static', filename='uploads/default.jpg') }}" alt="{{ current_user.username }}" class="profile-pic">
+
         {% else %}
             <a href="{{ url_for('auth.login') }}">Login</a>
             <a href="{{ url_for('auth.register') }}">Register</a>
