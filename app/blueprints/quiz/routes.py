@@ -84,6 +84,11 @@ def delete_bank(bank_id):
     flash(f'Question bank "{bank.name}" deleted successfully.', 'success')
     return redirect(url_for('quiz.list_banks'))
 
+LEVEL_ALIASES = {
+        'easy':   ['easy', 'fácil', 'facil', 'Fácil', 'Facil'],
+        'medium': ['medium', 'médio', 'medio', 'Médio', 'Medio'],
+        'hard':   ['hard', 'difícil', 'dificil', 'Difícil', 'Dificil'],
+}
 
 @quiz_bp.route('/banks/<int:bank_id>/configure', methods=['GET', 'POST'])
 @login_required
@@ -101,7 +106,8 @@ def configure(bank_id):
 
         query = Question.query.filter_by(bank_id=bank.id)
         if level != 'all':
-            query = query.filter_by(level=level)
+            aliases = LEVEL_ALIASES.get(level, [level])
+            query = query.filter(Question.level.in_(aliases))
 
         questions = query.all()
 
