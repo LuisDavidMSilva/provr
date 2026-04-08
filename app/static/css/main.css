@@ -1,5 +1,7 @@
 /* ===== RESET & BASE ===== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -17,7 +19,7 @@
     --success: #22c55e;
     --danger: #ef4444;
     --radius: 8px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -100,6 +102,12 @@ a:hover {
     border-radius: var(--radius);
     margin-bottom: 1rem;
     font-size: 0.9rem;
+}
+
+.alert-info {
+    background-color: rgba(197, 162, 34, 0.15);
+    border: 1px solid var(--info);
+    color: var(--info);
 }
 
 .alert-success {
@@ -281,7 +289,7 @@ footer {
 }
 
 footer a {
-    color : var(--text-muted);
+    color: var(--text-muted);
 }
 
 footer a:hover {
