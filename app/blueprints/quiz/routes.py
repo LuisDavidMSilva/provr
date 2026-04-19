@@ -1,5 +1,6 @@
 import json
 import random
+import os
 from datetime import datetime, time, timezone
 from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import login_required, current_user
@@ -22,6 +23,15 @@ def upload():
     form = UploadBankForm()
     if form.validate_on_submit():
         file = form.file.data
+        
+        file.seek(0, os.SEEK_END)
+        size = file.tell()
+        file.seek(0)
+        
+        if size > 3 * 1024 * 1024:
+            flash('JSON file is too large (max 3MB).', 'danger')
+            return redirect(url_for('quiz.upload'))
+
         try:
             content = file.read().decode('utf-8')
             questions_data = json.loads(content)
@@ -67,7 +77,7 @@ def upload():
 @quiz_bp.route('/banks')
 @login_required
 def list_banks():
-    banks = QuestionBank.query.filter_by(owner_id=current_user.id).all()
+    banks = db.session.scalars(db.select(QuestionBank).filter_by(owner_id=current_user.id)).all()
     form = DeleteBankForm()
     return render_template('quiz/list.html', banks=banks, form=form)
 
@@ -75,7 +85,7 @@ def list_banks():
 @quiz_bp.route('/banks/<int:bank_id>/delete', methods=['POST'])
 @login_required
 def delete_bank(bank_id):
-    bank = QuestionBank.query.get_or_404(bank_id)
+    bank = db.get_or_404(QuestionBank, bank_id)
     if bank.owner_id != current_user.id:
         flash('You are not allowed to delete this bank.', 'danger')
         return redirect(url_for('quiz.list_banks'))
@@ -93,7 +103,7 @@ LEVEL_ALIASES = {
 @quiz_bp.route('/banks/<int:bank_id>/configure', methods=['GET', 'POST'])
 @login_required
 def configure(bank_id):
-    bank = QuestionBank.query.get_or_404(bank_id)
+    bank = db.get_or_404(QuestionBank, bank_id)
     if bank.owner_id != current_user.id:
         flash('Access denied.', 'danger')
         return redirect(url_for('quiz.list_banks'))
@@ -104,36 +114,36 @@ def configure(bank_id):
         quantity = form.quantity.data
         time_limit = int(form.time_limit.data)
 
-        query = Question.query.filter_by(bank_id=bank.id)
+        query = db.select(Question).filter_by(bank_id=bank.id)
         if level != 'all':
             aliases = LEVEL_ALIASES.get(level, [level])
             query = query.filter(Question.level.in_(aliases))
 
-        questions = query.all()
+        questions = list(db.session.scalars(query).all())
 
         if len(questions) < quantity:
             flash(f'Not enough questions. This bank has {len(questions)} questions for the selected level.', 'danger')
             return redirect(url_for('quiz.configure', bank_id=bank.id))
 
         selected = random.sample(questions, quantity)
+        question_ids = [q.id for q in selected]
 
         quiz_session = QuizSession(
             user_id=current_user.id,
             bank_id=bank.id,
             total=quantity,
             time_limit=time_limit,
-            started_at=datetime.now(timezone.utc)
+            started_at=datetime.now(timezone.utc),
+            question_ids=[q.id for q in selected],
+            current_index=0
         )
         db.session.add(quiz_session)
-        db.session.flush()
+        db.session.commit()
 
         session['quiz_session_id'] = quiz_session.id
-        session['question_ids'] = [q.id for q in selected]
-        session['current_index'] = 0
         session['time_limit'] = time_limit
         session['started_at_ts'] = int(datetime.now(timezone.utc).timestamp())
 
-        db.session.commit()
         return redirect(url_for('quiz.take'))
 
     return render_template('quiz/configure.html', form=form, bank=bank)
@@ -143,25 +153,30 @@ def configure(bank_id):
 @login_required
 def take():
     quiz_session_id = session.get('quiz_session_id')
-    question_ids = session.get('question_ids')
-    current_index = session.get('current_index', 0)
     time_limit = session.get('time_limit')
-    
     started_at_ts = session.get('started_at_ts') 
 
-    if not quiz_session_id or not question_ids or not started_at_ts:
+    if not quiz_session_id or not started_at_ts:
         flash('No active quiz session.', 'danger')
         return redirect(url_for('quiz.list_banks'))
 
-    quiz_session = QuizSession.query.get(quiz_session_id)
+    quiz_session = db.session.get(QuizSession, quiz_session_id)
     if not quiz_session:
         flash('Quiz session not found.', 'danger')
         return redirect(url_for('quiz.list_banks'))
 
+    question_ids = quiz_session.question_ids
+    current_index = quiz_session.current_index
+
     if current_index >= len(question_ids):
+        if quiz_session.finished_at is None:
+            answers = db.session.scalars(db.select(QuizAnswer).filter_by(session_id=quiz_session_id)).all()
+            quiz_session.score = sum(1 for a in answers if a.is_correct)
+            quiz_session.finished_at = datetime.now(timezone.utc)
+            db.session.commit()
         return redirect(url_for('quiz.result'))
 
-    question = Question.query.get_or_404(question_ids[current_index])
+    question = db.get_or_404(Question, question_ids[current_index])
     form = AnswerForm()
 
     if form.validate_on_submit():
@@ -171,6 +186,11 @@ def take():
             
             if elapsed > (time_limit + 5):
                 flash('Time is up! Your quiz was automatically submitted.', 'warning')
+                if quiz_session.finished_at is None:
+                    answers = db.session.scalars(db.select(QuizAnswer).filter_by(session_id=quiz_session_id)).all()
+                    quiz_session.score = sum(1 for a in answers if a.is_correct)
+                    quiz_session.finished_at = datetime.now(timezone.utc)
+                    db.session.commit()
                 return redirect(url_for('quiz.result'))
 
         selected = request.form.get('answer')
@@ -187,9 +207,9 @@ def take():
             is_correct=is_correct
         )
         db.session.add(answer)
+        quiz_session.current_index += 1
         db.session.commit()
 
-        session['current_index'] = current_index + 1
         return redirect(url_for('quiz.take'))
 
     return render_template('quiz/take.html',
@@ -210,17 +230,13 @@ def result():
     if not quiz_session_id:
         return redirect(url_for('quiz.list_banks'))
 
-    quiz_session = QuizSession.query.get_or_404(quiz_session_id)
-    answers = QuizAnswer.query.filter_by(session_id=quiz_session_id).all()
-    score = sum(1 for a in answers if a.is_correct)
-
-    quiz_session.score = score
-    quiz_session.finished_at = datetime.now(timezone.utc)
-    db.session.commit()
+    quiz_session = db.get_or_404(QuizSession, quiz_session_id)
+    answers = db.session.scalars(db.select(QuizAnswer).filter_by(session_id=quiz_session_id)).all()
+    score = quiz_session.score
 
     session.pop('quiz_session_id', None)
-    session.pop('question_ids', None)
-    session.pop('current_index', None)
+    session.pop('time_limit', None)
+    session.pop('started_at_ts', None)
 
     return render_template('quiz/result.html',
                            quiz_session=quiz_session,
@@ -231,17 +247,17 @@ def result():
 @quiz_bp.route('/history')
 @login_required
 def history():
-    sessions = QuizSession.query.filter_by(user_id=current_user.id).order_by(QuizSession.started_at.desc()).all()
+    sessions = db.session.scalars(db.select(QuizSession).filter_by(user_id=current_user.id).order_by(QuizSession.started_at.desc())).all()
     return render_template('quiz/history.html', sessions=sessions)
 
 
 @quiz_bp.route('/history/<int:session_id>')
 @login_required
 def session_detail(session_id):
-    quiz_session = QuizSession.query.get_or_404(session_id)
+    quiz_session = db.get_or_404(QuizSession, session_id)
     if quiz_session.user_id != current_user.id:
         flash('Access denied.', 'danger')
         return redirect(url_for('quiz.history'))
 
-    answers = QuizAnswer.query.filter_by(session_id=session_id).all()
+    answers = db.session.scalars(db.select(QuizAnswer).filter_by(session_id=session_id)).all()
     return render_template('quiz/result.html', quiz_session=quiz_session, answers=answers, score=quiz_session.score)

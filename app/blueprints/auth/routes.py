@@ -15,10 +15,11 @@ def register():
         return redirect(url_for('quiz.index'))  
     form = RegistrationForm()
     if form.validate_on_submit():
-        if User.query.filter_by(email=form.email.data).first():
+        if db.session.scalar(db.select(User).filter_by(email=form.email.data)):
             flash('Email already registered. Please log in.', 'danger')
             return redirect(url_for('auth.login'))
-        if User.query.filter_by(username=form.username.data).first():
+            
+        if db.session.scalar(db.select(User).filter_by(username=form.username.data)):
             flash('Username already taken. Please choose another.', 'danger')
             return redirect(url_for('auth.register'))
         
@@ -42,7 +43,7 @@ def login():
         return redirect(url_for('quiz.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
         if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
             login_user(user)
             flash('Logged in successfully!', 'success')
@@ -79,6 +80,14 @@ def update_picture():
     form = UpdateProfilePictureForm()
     if form.validate_on_submit():
         file = form.picture.data
+        
+        file.seek(0, os.SEEK_END)
+        size = file.tell()
+        file.seek(0)
+        if size > 3 * 1024 * 1024:
+            flash('Image file is too large (max 3MB).', 'danger')
+            return redirect(url_for('auth.update_picture'))
+            
         upload_folder = os.path.join('app', 'static', 'uploads')
         os.makedirs(upload_folder, exist_ok=True)
 

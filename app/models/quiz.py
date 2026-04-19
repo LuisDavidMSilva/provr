@@ -1,21 +1,27 @@
-from app import db
+from typing import Optional, List, Any
 from datetime import datetime, timezone
-
+from sqlalchemy import String, Integer, ForeignKey, JSON
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app import db
 
 class QuizSession(db.Model):
     __tablename__ = 'quiz_sessions'
 
-    id          = db.Column(db.Integer, primary_key=True)
-    user_id     = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    bank_id     = db.Column(db.Integer, db.ForeignKey('question_banks.id'), nullable=True)
-    score       = db.Column(db.Integer, nullable=True)
-    total       = db.Column(db.Integer, nullable=False)
-    time_limit  = db.Column(db.Integer, nullable=True)
-    started_at  = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    finished_at = db.Column(db.DateTime, nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    bank_id: Mapped[Optional[int]] = mapped_column(ForeignKey('question_banks.id'))
+    score: Mapped[Optional[int]] = mapped_column()
+    total: Mapped[int] = mapped_column()
+    time_limit: Mapped[Optional[int]] = mapped_column()
+    started_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
+    finished_at: Mapped[Optional[datetime]] = mapped_column()
+    
+    current_index: Mapped[int] = mapped_column(default=0)
+    question_ids: Mapped[list[int]] = mapped_column(JSON)
 
-    user = db.relationship('User', backref='sessions')
-    bank = db.relationship('QuestionBank', backref='sessions')
+    user: Mapped["User"] = relationship(back_populates="sessions")
+    bank: Mapped[Optional["QuestionBank"]] = relationship(back_populates="sessions")
+    answers: Mapped[list["QuizAnswer"]] = relationship(back_populates="session", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'<QuizSession User:{self.user_id} Bank:{self.bank_id} Score:{self.score}/{self.total}>'
@@ -24,14 +30,14 @@ class QuizSession(db.Model):
 class QuizAnswer(db.Model):
     __tablename__ = 'quiz_answers'
 
-    id              = db.Column(db.Integer, primary_key=True)
-    session_id      = db.Column(db.Integer, db.ForeignKey('quiz_sessions.id'), nullable=False)
-    question_id     = db.Column(db.Integer, db.ForeignKey('questions.id', ondelete='SET NULL'), nullable=True)
-    selected_answer = db.Column(db.String(10), nullable=False)
-    is_correct      = db.Column(db.Boolean, nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    session_id: Mapped[int] = mapped_column(ForeignKey('quiz_sessions.id'))
+    question_id: Mapped[Optional[int]] = mapped_column(ForeignKey('questions.id', ondelete='SET NULL'))
+    selected_answer: Mapped[str] = mapped_column(String(10))
+    is_correct: Mapped[bool] = mapped_column()
 
-    session  = db.relationship('QuizSession', backref=db.backref('answers', cascade='all, delete-orphan'))
-    question = db.relationship('Question', backref=db.backref('answers', passive_deletes=True))
+    session: Mapped["QuizSession"] = relationship(back_populates="answers")
+    question: Mapped[Optional["Question"]] = relationship(back_populates="answers")
 
     def __repr__(self):
         return f'<QuizAnswer session:{self.session_id} question:{self.question_id} correct:{self.is_correct}>'

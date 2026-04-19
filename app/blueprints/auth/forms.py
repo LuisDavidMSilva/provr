@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, StringField, SubmitField
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 
@@ -49,6 +49,7 @@ class ChangePasswordForm(FlaskForm):
 class UpdateProfilePictureForm(FlaskForm):
     picture = FileField('Profile Picture', validators=[
         DataRequired(),
-        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
+        FileAllowed(['jpg', 'png', 'jpeg', 'webp'], 'Images only!'),
+        FileSize(max_size=3 * 1024 * 1024, message='File must be less than 3MB')
     ])
     submit = SubmitField('Update Profile Picture')
