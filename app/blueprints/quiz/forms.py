@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms import StringField, SubmitField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, NumberRange
 
@@ -10,7 +10,8 @@ class UploadBankForm(FlaskForm):
     ])
     file = FileField('Question Bank File', validators=[
         DataRequired(),
-        FileAllowed(['json', 'txt'], 'JSON or TXT files only!')
+        FileAllowed(['json', 'txt'], 'JSON or TXT files only!'),
+        FileSize(max_size=3 * 1024 * 1024, message='File must be less than 3MB')
     ])
     submit = SubmitField('Upload')
 
