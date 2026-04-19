@@ -24,8 +24,8 @@ def upgrade():
                nullable=False)
 
     with op.batch_alter_table('quiz_sessions', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('current_index', sa.Integer(), nullable=False))
-        batch_op.add_column(sa.Column('question_ids', sa.JSON(), nullable=False))
+        batch_op.add_column(sa.Column('current_index', sa.Integer(), nullable=False, server_default='0'))
+        batch_op.add_column(sa.Column('question_ids', sa.JSON(), nullable=False, server_default='[]'))
         batch_op.alter_column('started_at',
                existing_type=sa.DATETIME(),
                nullable=False)
