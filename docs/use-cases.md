@@ -16,7 +16,7 @@ graph TD
     U --> UC6[Delete question bank]
     U --> UC7[Begin quiz]
     U --> UC8[See history]
-    U --> UC9[Auto-leveling]
+    U --> UC9[AI performance analysis]
 
     UC7 --> UC10[Choose time]
     UC7 --> UC11[Choose quantity]
