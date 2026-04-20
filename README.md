@@ -1,4 +1,4 @@
-# Provr
+![Provr](app/static/img/provr_logo.svg)
 
 A web-based test application platform. Create accounts, upload question banks, take timed quizzes by difficulty level, and track your performance history.
 
