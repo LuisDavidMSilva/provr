@@ -5,6 +5,5 @@ __pycache__/
 *.pyc
 instance/
 migrations/versions/*.pyc
-migrations/versions/*.py
 app/static/uploads
 .vscode

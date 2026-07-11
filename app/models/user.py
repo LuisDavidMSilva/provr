@@ -16,7 +16,6 @@ class User(UserMixin, db.Model):
     username: Mapped[str] = mapped_column(String(80), unique=True)
     email: Mapped[str] = mapped_column(String(120), unique=True)
     password_hash: Mapped[str] = mapped_column(String(256))
-    recovery_key_hash: Mapped[str] = mapped_column(String(256))
     profile_picture: Mapped[Optional[str]] = mapped_column(String(256))
     created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
 
