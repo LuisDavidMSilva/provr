@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash
 from app import db, bcrypt
 from app.models.user import User
-from app.blueprints.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateProfilePictureForm
+from app.blueprints.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateProfilePictureForm, ResetPasswordForm, GenerateRecoveryKeyForm
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth_bp
 import os
@@ -23,16 +23,20 @@ def register():
             flash('Username already taken. Please choose another.', 'danger')
             return redirect(url_for('auth.register'))
         
+        import secrets
+        recovery_key = '-'.join([secrets.token_hex(4).upper() for _ in range(3)])
+        hashed_recovery_key = bcrypt.generate_password_hash(recovery_key).decode('utf-8')
+
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(
             username=form.username.data,
             email=form.email.data,
-            password_hash=hashed_password
+            password_hash=hashed_password,
+            recovery_key_hash=hashed_recovery_key
         )
         db.session.add(user)
         db.session.commit()
-        flash('Account created successfully! You can now log in.', 'success')
-        return redirect(url_for('auth.login'))
+        return render_template('auth/register_success.html', recovery_key=recovery_key)
     return render_template('auth/register.html', form=form)
 
 
@@ -73,6 +77,19 @@ def change_password():
         flash('Current password is incorrect.', 'danger')
     return render_template('auth/change_password.html', form=form)
 
+def reset_password_request():
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
+        if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
+            login_user(user)
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('quiz.index'))
+        flash('Invalid email or password.', 'danger')
+    return render_template('auth/reset_password_request.html', form=form)
+
+
+
 
 @auth_bp.route('/update-picture', methods=['GET', 'POST'])
 @login_required
@@ -104,3 +121,45 @@ def update_picture():
         flash('Profile picture updated successfully!', 'success')
         return redirect(url_for('quiz.index'))
     return render_template('auth/update_picture.html', form=form)
+
+
+@auth_bp.route('/reset-password', methods=['GET', 'POST'])
+def reset_password():
+    if current_user.is_authenticated:
+        return redirect(url_for('quiz.index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
+        if user:
+            if not user.recovery_key_hash:
+                flash('This account does not have a recovery key configured.', 'danger')
+                return redirect(url_for('auth.reset_password'))
+
+            clean_key = form.recovery_key.data.strip().upper()
+            if bcrypt.check_password_hash(user.recovery_key_hash, clean_key):
+                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+                user.password_hash = hashed_password
+                db.session.commit()
+                flash('Password reset successfully! You can now log in.', 'success')
+                return redirect(url_for('auth.login'))
+        
+        flash('Invalid email or recovery key.', 'danger')
+    return render_template('auth/reset_password.html', form=form)
+
+
+@auth_bp.route('/recovery-key', methods=['GET', 'POST'])
+@login_required
+def recovery_key():
+    form = GenerateRecoveryKeyForm()
+    new_key = None
+    if form.validate_on_submit():
+        if bcrypt.check_password_hash(current_user.password_hash, form.password.data):
+            import secrets
+            new_key = '-'.join([secrets.token_hex(4).upper() for _ in range(3)])
+            hashed_recovery_key = bcrypt.generate_password_hash(new_key).decode('utf-8')
+            current_user.recovery_key_hash = hashed_recovery_key
+            db.session.commit()
+            flash('New recovery key generated successfully!', 'success')
+        else:
+            flash('Incorrect password.', 'danger')
+    return render_template('auth/recovery_key.html', form=form, new_key=new_key)
