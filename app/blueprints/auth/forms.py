@@ -46,6 +46,32 @@ class ChangePasswordForm(FlaskForm):
     ])
     submit = SubmitField('Change Password')
 
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators=[
+        DataRequired(),
+        Email()
+    ])
+    username = StringField('Username', validators=[
+        DataRequired(),
+        Length(min=3, max=80)
+    ])
+    recovery_key = StringField('Recovery Key', validators=[
+        DataRequired(),
+        Length(min=32, max=32)
+    ])
+    submit = SubmitField('Request Reset')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[
+        DataRequired(),
+        Length(min=12, max=128)
+    ])
+    confirm_password = PasswordField('Confirm Password', validators=[
+        DataRequired(),
+        EqualTo('password', message='Passwords must match')
+    ])
+    submit = SubmitField('Reset Password')
+
 class UpdateProfilePictureForm(FlaskForm):
     picture = FileField('Profile Picture', validators=[
         DataRequired(),
@@ -53,3 +79,24 @@ class UpdateProfilePictureForm(FlaskForm):
         FileSize(max_size=3 * 1024 * 1024, message='File must be less than 3MB')
     ])
     submit = SubmitField('Update Profile Picture')
+class ResetPasswordForm(FlaskForm):
+    email = StringField('Email', validators=[
+        DataRequired(),
+        Email()
+    ])
+    recovery_key = StringField('Recovery Key', validators=[
+        DataRequired()
+    ])
+    password = PasswordField('New Password', validators=[
+        DataRequired(),
+        Length(min=12, max=128)
+    ])
+    confirm_password = PasswordField('Confirm New Password', validators=[
+        DataRequired(),
+        EqualTo('password', message='Passwords must match')
+    ])
+    submit = SubmitField('Reset Password')
+
+class GenerateRecoveryKeyForm(FlaskForm):
+    password = PasswordField('Confirm Password', validators=[DataRequired()])
+    submit = SubmitField('Generate Recovery Key')

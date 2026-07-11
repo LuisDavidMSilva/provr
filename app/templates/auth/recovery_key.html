@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Recovery Key - Provr{% endblock %}
+
+{% block content %}
+<div class="auth-card" style="max-width: 500px; margin: 2rem auto; padding: 2rem; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface);">
+    <h2>Recovery Key</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Manage your password recovery key.</p>
+
+    {% if new_key %}
+        <div class="alert alert-success" style="margin-bottom: 1.5rem;">
+            <strong>Success:</strong> A new recovery key has been generated.
+        </div>
+        
+        <div style="background-color: var(--bg); padding: 1rem; border-radius: 4px; border: 1px solid var(--border); margin: 1.5rem 0; text-align: center;">
+            <span style="font-family: monospace; font-size: 1.5rem; letter-spacing: 2px; font-weight: bold; color: var(--text);" id="recovery-key">{{ new_key }}</span>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <button onclick="copyToClipboard()" class="btn-primary" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                📋 Copy Key
+            </button>
+        </div>
+
+        <div class="alert alert-warning" style="margin-bottom: 2rem;">
+            <strong>⚠️ IMPORTANT:</strong> Copy and save this key somewhere safe. It will not be shown again. We only store a secure hash, meaning it's impossible for us to retrieve the original key for you.
+        </div>
+
+        <a href="{{ url_for('quiz.index') }}" class="btn-primary" style="display: block; text-align: center;">Back to Dashboard</a>
+
+        <script>
+        function copyToClipboard() {
+            const keyElement = document.getElementById('recovery-key');
+            const keyText = keyElement.innerText;
+            navigator.clipboard.writeText(keyText).then(() => {
+                alert('Recovery key copied to clipboard!');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+        </script>
+    {% else %}
+        {% if current_user.recovery_key_hash %}
+            <p>✅ <strong>Status:</strong> You have a recovery key configured.</p>
+            <p style="margin-bottom: 2rem;">For security reasons, we do not display your recovery key on this screen. If you have lost it, you can generate a new one below. This will invalidate your previous recovery key.</p>
+        {% else %}
+            <p>❌ <strong>Status:</strong> You do not have a recovery key configured yet.</p>
+            <p style="margin-bottom: 2rem;">It is highly recommended to generate a recovery key. Without it, if you lose your password, you will not be able to recover your account.</p>
+        {% endif %}
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div>
+                {{ form.password.label }}
+                {{ form.password(placeholder="Enter current password") }}
+                {% for error in form.password.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            {{ form.submit() }}
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
