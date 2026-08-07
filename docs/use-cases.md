@@ -7,6 +7,11 @@ graph TD
     A --> A1[Manage users]
     A --> A2[Delete question banks]
     A --> A3[View all sessions]
+    A --> A4[View usage analytics dashboard]
+    A --> A5[Track user performance progression]
+    A --> A6[Configure content moderation settings]
+    A --> A7[Audit security logs of blocked uploads]
+    A --> A8[Promote or demote administrators]
 
     U --> UC1[Create account]
     U --> UC2[Login]
