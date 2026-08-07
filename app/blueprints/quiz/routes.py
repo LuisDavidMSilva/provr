@@ -7,6 +7,7 @@ from flask_login import login_required, current_user
 from app import db
 from app.models.question import QuestionBank, Question
 from app.models.quiz import QuizSession, QuizAnswer
+from app.models.moderation import ContentFilterConfig, ModerationLog
 from app.blueprints.quiz.forms import UploadBankForm, DeleteBankForm, QuizConfigForm, AnswerForm
 from . import quiz_bp
 
@@ -27,13 +28,73 @@ def upload():
         file.seek(0, os.SEEK_END)
         size = file.tell()
         file.seek(0)
-        
-        if size > 3 * 1024 * 1024:
-            flash('JSON file is too large (max 3MB).', 'danger')
-            return redirect(url_for('quiz.upload'))
+
+        # 1. Size Filter Check
+        size_cfg = db.session.scalar(db.select(ContentFilterConfig).filter_by(name='max_file_size'))
+        if size_cfg and size_cfg.is_active:
+            try:
+                max_size_mb = float(size_cfg.value)
+            except ValueError:
+                max_size_mb = 3.0
+            if size > max_size_mb * 1024 * 1024:
+                reason = f"Upload blocked: file size ({size / (1024*1024):.2f}MB) exceeds limit of {max_size_mb}MB."
+                log = ModerationLog(
+                    user_id=current_user.id,
+                    username=current_user.username,
+                    action='blocked',
+                    content_type='question_bank_json',
+                    reason=reason,
+                    filename=file.filename
+                )
+                db.session.add(log)
+                db.session.commit()
+                flash(reason, 'danger')
+                return redirect(url_for('quiz.upload'))
+
+        # 2. Extension Filter Check
+        ext_cfg = db.session.scalar(db.select(ContentFilterConfig).filter_by(name='blocked_extensions'))
+        if ext_cfg and ext_cfg.is_active:
+            ext = file.filename.split('.')[-1].lower() if '.' in file.filename else ''
+            blocked_exts = [e.strip().lower() for e in ext_cfg.value.split(',') if e.strip()]
+            if ext in blocked_exts:
+                reason = f"Upload blocked: file extension '.{ext}' is prohibited."
+                log = ModerationLog(
+                    user_id=current_user.id,
+                    username=current_user.username,
+                    action='blocked',
+                    content_type='question_bank_json',
+                    reason=reason,
+                    filename=file.filename
+                )
+                db.session.add(log)
+                db.session.commit()
+                flash(reason, 'danger')
+                return redirect(url_for('quiz.upload'))
 
         try:
             content = file.read().decode('utf-8')
+
+            # 3. Content Keyword Filter Check
+            keyword_cfg = db.session.scalar(db.select(ContentFilterConfig).filter_by(name='blocked_keywords'))
+            if keyword_cfg and keyword_cfg.is_active:
+                blocked_words = [w.strip().lower() for w in keyword_cfg.value.split(',') if w.strip()]
+                content_lower = content.lower()
+                matched_words = [w for w in blocked_words if w in content_lower]
+                if matched_words:
+                    reason = f"Upload blocked: file contains forbidden keywords ({', '.join(matched_words)})."
+                    log = ModerationLog(
+                        user_id=current_user.id,
+                        username=current_user.username,
+                        action='blocked',
+                        content_type='question_bank_json',
+                        reason=reason,
+                        filename=file.filename
+                    )
+                    db.session.add(log)
+                    db.session.commit()
+                    flash(reason, 'danger')
+                    return redirect(url_for('quiz.upload'))
+
             questions_data = json.loads(content)
 
             if not isinstance(questions_data, list):

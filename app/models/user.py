@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     password_hash: Mapped[str] = mapped_column(String(256))
     profile_picture: Mapped[Optional[str]] = mapped_column(String(256))
     created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
+    is_admin: Mapped[bool] = mapped_column(default=False)
 
     recovery_key_hash: Mapped[Optional[str]] = mapped_column(String(256))
 

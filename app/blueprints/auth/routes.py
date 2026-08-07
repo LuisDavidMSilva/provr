@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash
 from app import db, bcrypt
 from app.models.user import User
+from app.models.moderation import ContentFilterConfig, ModerationLog
 from app.blueprints.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateProfilePictureForm, ResetPasswordForm, GenerateRecoveryKeyForm
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth_bp
@@ -101,9 +102,48 @@ def update_picture():
         file.seek(0, os.SEEK_END)
         size = file.tell()
         file.seek(0)
-        if size > 3 * 1024 * 1024:
-            flash('Image file is too large (max 3MB).', 'danger')
-            return redirect(url_for('auth.update_picture'))
+
+        # 1. Size Filter Check
+        size_cfg = db.session.scalar(db.select(ContentFilterConfig).filter_by(name='max_file_size'))
+        if size_cfg and size_cfg.is_active:
+            try:
+                max_size_mb = float(size_cfg.value)
+            except ValueError:
+                max_size_mb = 3.0
+            if size > max_size_mb * 1024 * 1024:
+                reason = f"Upload blocked: profile picture size ({size / (1024*1024):.2f}MB) exceeds limit of {max_size_mb}MB."
+                log = ModerationLog(
+                    user_id=current_user.id,
+                    username=current_user.username,
+                    action='blocked',
+                    content_type='profile_picture',
+                    reason=reason,
+                    filename=file.filename
+                )
+                db.session.add(log)
+                db.session.commit()
+                flash(reason, 'danger')
+                return redirect(url_for('auth.update_picture'))
+
+        # 2. Extension Filter Check
+        ext_cfg = db.session.scalar(db.select(ContentFilterConfig).filter_by(name='blocked_extensions'))
+        if ext_cfg and ext_cfg.is_active:
+            ext = file.filename.split('.')[-1].lower() if '.' in file.filename else ''
+            blocked_exts = [e.strip().lower() for e in ext_cfg.value.split(',') if e.strip()]
+            if ext in blocked_exts:
+                reason = f"Upload blocked: file extension '.{ext}' is prohibited."
+                log = ModerationLog(
+                    user_id=current_user.id,
+                    username=current_user.username,
+                    action='blocked',
+                    content_type='profile_picture',
+                    reason=reason,
+                    filename=file.filename
+                )
+                db.session.add(log)
+                db.session.commit()
+                flash(reason, 'danger')
+                return redirect(url_for('auth.update_picture'))
             
         upload_folder = os.path.join('app', 'static', 'uploads')
         os.makedirs(upload_folder, exist_ok=True)
