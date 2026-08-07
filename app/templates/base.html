@@ -24,6 +24,9 @@
             <a href="{{ url_for('auth.recovery_key') }}">Recovery Key</a>
             <a href="{{ url_for('quiz.list_banks') }}">My Banks</a>
             <a href="{{ url_for('quiz.history') }}">My Results</a>
+            {% if current_user.is_admin %}
+            <a href="{{ url_for('admin.dashboard') }}" style="color: #6c63ff; font-weight: bold; border: 1px solid #6c63ff; padding: 2px 8px; border-radius: 4px;">Admin Panel</a>
+            {% endif %}
             <a href="{{ url_for('auth.logout') }}">Logout</a>
             <img src="{{ url_for('static', filename=current_user.profile_picture) if current_user.profile_picture else url_for('static', filename='uploads/default.jpg') }}"
                 alt="{{ current_user.username }}" class="profile-pic">

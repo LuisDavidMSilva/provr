@@ -28,7 +28,7 @@ def create_app(config_name='development'):
     login_manager.login_message_category = 'danger'
     
     with app.app_context():
-        from app.models import user, question, quiz
+        from app.models import user, question, quiz, moderation
 
     from app.blueprints.auth import auth_bp
     from app.blueprints.quiz import quiz_bp

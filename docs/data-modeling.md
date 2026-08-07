@@ -8,6 +8,7 @@ erDiagram
         string password_hash
         string profile_picture
         datetime created_at
+        boolean is_admin
     }
 
     QUESTION_BANK {
@@ -46,8 +47,28 @@ erDiagram
         datetime finished_at
     }
 
+    CONTENT_FILTER_CONFIG {
+        int id PK
+        string name
+        text value
+        string description
+        boolean is_active
+    }
+
+    MODERATION_LOG {
+        int id PK
+        int user_id FK
+        string username
+        string action
+        string content_type
+        string reason
+        string filename
+        datetime timestamp
+    }
+
     USER ||--o{ QUESTION_BANK : "owns"
     USER ||--o{ QUIZ_SESSION : "takes"
+    USER ||--o{ MODERATION_LOG : "triggers"
     QUESTION ||--o{ QUIZ_ANSWER : "answered in"
     QUIZ_SESSION ||--o{ QUIZ_ANSWER : "contains"
     QUESTION_BANK ||--o{ QUESTION : "contains"

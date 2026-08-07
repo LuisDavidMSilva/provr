@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}User Performance & Progression — Provr{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Admin Control Panel</h1>
+        <p class="subtitle">System overview, metrics, and security audits</p>
+    </div>
+
+    <!-- Admin Sub-navigation -->
+    <div class="admin-tabs">
+        <a href="{{ url_for('admin.dashboard') }}" class="tab-btn">Overview</a>
+        <a href="{{ url_for('admin.analytics') }}" class="tab-btn">Usage Analytics</a>
+        <a href="{{ url_for('admin.performance') }}" class="tab-btn active">User Performance</a>
+        <a href="{{ url_for('admin.moderation') }}" class="tab-btn">Content Security</a>
+    </div>
+
+    <!-- Progression Chart Section -->
+    <div class="section-card progression-section" id="progressionSection" style="margin-bottom: 2rem;">
+        <h2 id="progressionTitle">User Progression Tracker</h2>
+        <p id="progressionSubtitle" class="text-muted">Select a user from the table below to view their historical score progression.</p>
+        <div class="chart-container" style="height: 250px; margin-top: 1rem; position: relative;">
+            <div id="noDataPlaceholder" class="chart-placeholder">
+                <p>📊 Click "View Progression" on a user to render their score timeline.</p>
+            </div>
+            <canvas id="progressionChart" style="display: none;"></canvas>
+        </div>
+    </div>
+
+    <!-- User performance list card -->
+    <div class="section-card">
+        <h2>User Performance Summary</h2>
+        <div class="table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Quizzes</th>
+                        <th>Questions</th>
+                        <th>Correct Answers</th>
+                        <th>Avg Score</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in user_stats %}
+                    <tr id="user-row-{{ u.id }}">
+                        <td>
+                            <div class="table-user-info">
+                                <div class="user-details">
+                                    <span class="user-name">{{ u.username }}</span>
+                                    <span class="user-email">{{ u.email }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge {% if u.is_admin %}admin-badge{% else %}user-badge{% endif %}">
+                                {% if u.is_admin %}Admin{% else %}User{% endif %}
+                            </span>
+                        </td>
+                        <td>{{ u.total_quizzes }}</td>
+                        <td>{{ u.total_questions }}</td>
+                        <td style="color: var(--success); font-weight: 600;">{{ u.total_correct }}</td>
+                        <td>
+                            <div class="score-progress-wrapper">
+                                <span class="score-text">{{ u.avg_score }}%</span>
+                                <div class="score-progress-bar">
+                                    <div class="score-progress-fill" style="width: {{ u.avg_score }}%; background-color: {% if u.avg_score >= 70 %}var(--success){% elif u.avg_score >= 50 %}var(--primary){% else %}var(--danger){% endif %};"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons-flex">
+                                <button type="button" class="btn-sm btn-info" onclick="loadProgression({{ u.id }})">
+                                    View Progression
+                                </button>
+                                
+                                <form action="{{ url_for('admin.toggle_admin', user_id=u.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to change this user\'s role?');">
+                                    <button type="submit" class="btn-sm {% if u.is_admin %}btn-danger{% else %}btn-success{% endif %}">
+                                        {% if u.is_admin %}Demote{% else %}Promote Admin{% endif %}
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="empty-state">No users registered in the system.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Global user progressions mapped from server side
+    const userProgressions = {
+        {% for u in user_stats %}
+        "{{ u.id }}": {
+            username: "{{ u.username|escape }}",
+            data: {{ u.progression|tojson }}
+        },
+        {% endfor %}
+    };
+
+    let progChart = null;
+
+    function loadProgression(userId) {
+        const userData = userProgressions[userId];
+        if (!userData) return;
+
+        const progression = userData.data;
+        const titleEl = document.getElementById('progressionTitle');
+        const subtitleEl = document.getElementById('progressionSubtitle');
+        const placeholder = document.getElementById('noDataPlaceholder');
+        const canvas = document.getElementById('progressionChart');
+
+        // Scroll to progression tracker
+        document.getElementById('progressionSection').scrollIntoView({ behavior: 'smooth' });
+
+        if (progression.length === 0) {
+            titleEl.textContent = `Progression Tracker: ${userData.username}`;
+            subtitleEl.textContent = "This user hasn't completed any quiz sessions yet.";
+            placeholder.style.display = 'flex';
+            canvas.style.display = 'none';
+            placeholder.querySelector('p').textContent = `😕 ${userData.username} has no quiz history to track.`;
+            return;
+        }
+
+        placeholder.style.display = 'none';
+        canvas.style.display = 'block';
+
+        titleEl.textContent = `Progression: ${userData.username}`;
+        subtitleEl.textContent = `Tracking score evolution over ${progression.length} completed quiz sessions.`;
+
+        // Extract labels and scores
+        const labels = progression.map(item => `Session ${item.index}\n(${item.date})`);
+        const scores = progression.map(item => item.score_pct);
+
+        if (progChart) {
+            progChart.destroy();
+        }
+
+        const ctx = canvas.getContext('2d');
+        progChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Score (%)',
+                    data: scores,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.25,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#2e3250' },
+                        ticks: { color: '#8892a4', font: { size: 10 } }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        grid: { color: '#2e3250' },
+                        ticks: {
+                            color: '#8892a4',
+                            callback: function(value) { return value + "%"; }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
