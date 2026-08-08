@@ -2,10 +2,11 @@ from flask import render_template, redirect, url_for, flash
 from app import db, bcrypt
 from app.models.user import User
 from app.models.moderation import ContentFilterConfig, ModerationLog
-from app.blueprints.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateProfilePictureForm, ResetPasswordForm, GenerateRecoveryKeyForm
+from app.blueprints.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateProfilePictureForm, SetNewPassword, RecoveryPassword, GenerateRecoveryKeyForm, ResetPasswordRequestForm
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth_bp
 import os
+import secrets
 from PIL import Image
 
 
@@ -24,7 +25,6 @@ def register():
             flash('Username already taken. Please choose another.', 'danger')
             return redirect(url_for('auth.register'))
         
-        import secrets
         recovery_key = '-'.join([secrets.token_hex(4).upper() for _ in range(3)])
         hashed_recovery_key = bcrypt.generate_password_hash(recovery_key).decode('utf-8')
 
@@ -78,15 +78,18 @@ def change_password():
         flash('Current password is incorrect.', 'danger')
     return render_template('auth/change_password.html', form=form)
 
+@auth_bp.route('/reset-password-request', methods=['GET', 'POST'])
 def reset_password_request():
     form = ResetPasswordRequestForm()
     if form.validate_on_submit():
         user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
-        if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
-            login_user(user)
-            flash('Logged in successfully!', 'success')
-            return redirect(url_for('quiz.index'))
-        flash('Invalid email or password.', 'danger')
+        if user and user.username == form.username.data:
+            clean_key = form.recovery_key.data.strip().upper()
+            if user.recovery_key_hash and bcrypt.check_password_hash(user.recovery_key_hash, clean_key):
+                login_user(user)
+                flash('Access granted using recovery key. Please change your password.', 'info')
+                return redirect(url_for('auth.change_password'))
+        flash('Invalid email, username, or recovery key.', 'danger')
     return render_template('auth/reset_password_request.html', form=form)
 
 
@@ -167,7 +170,7 @@ def update_picture():
 def reset_password():
     if current_user.is_authenticated:
         return redirect(url_for('quiz.index'))
-    form = ResetPasswordForm()
+    form = RecoveryPassword()
     if form.validate_on_submit():
         user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
         if user:
@@ -194,7 +197,6 @@ def recovery_key():
     new_key = None
     if form.validate_on_submit():
         if bcrypt.check_password_hash(current_user.password_hash, form.password.data):
-            import secrets
             new_key = '-'.join([secrets.token_hex(4).upper() for _ in range(3)])
             hashed_recovery_key = bcrypt.generate_password_hash(new_key).decode('utf-8')
             current_user.recovery_key_hash = hashed_recovery_key
