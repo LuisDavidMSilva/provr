@@ -44,7 +44,7 @@ def upload():
                     action='blocked',
                     content_type='question_bank_json',
                     reason=reason,
-                    filename=file.filename
+                    filename=file.filename or 'unknown'
                 )
                 db.session.add(log)
                 db.session.commit()
@@ -64,7 +64,7 @@ def upload():
                     action='blocked',
                     content_type='question_bank_json',
                     reason=reason,
-                    filename=file.filename
+                    filename=file.filename or 'unknown'
                 )
                 db.session.add(log)
                 db.session.commit()
@@ -88,7 +88,7 @@ def upload():
                         action='blocked',
                         content_type='question_bank_json',
                         reason=reason,
-                        filename=file.filename
+                        filename=file.filename or 'unknown'
                     )
                     db.session.add(log)
                     db.session.commit()

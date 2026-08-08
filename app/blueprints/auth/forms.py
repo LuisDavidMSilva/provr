@@ -38,7 +38,7 @@ class ChangePasswordForm(FlaskForm):
     current_password = PasswordField('Current Password', validators=[DataRequired()])
     new_password = PasswordField('New Password', validators=[
         DataRequired(),
-        Length(min=8, max=128)
+        Length(min=12, max=128)
     ])
     confirm_password = PasswordField('Confirm Password', validators=[
         DataRequired(),
@@ -57,11 +57,11 @@ class ResetPasswordRequestForm(FlaskForm):
     ])
     recovery_key = StringField('Recovery Key', validators=[
         DataRequired(),
-        Length(min=32, max=32)
+        Length(min=12, max=36)
     ])
     submit = SubmitField('Request Reset')
 
-class ResetPasswordForm(FlaskForm):
+class SetNewPassword(FlaskForm):
     password = PasswordField('Password', validators=[
         DataRequired(),
         Length(min=12, max=128)
@@ -79,7 +79,8 @@ class UpdateProfilePictureForm(FlaskForm):
         FileSize(max_size=3 * 1024 * 1024, message='File must be less than 3MB')
     ])
     submit = SubmitField('Update Profile Picture')
-class ResetPasswordForm(FlaskForm):
+
+class RecoveryPassword(FlaskForm):
     email = StringField('Email', validators=[
         DataRequired(),
         Email()

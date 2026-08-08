@@ -1,6 +1,6 @@
 ![Provr](app/static/img/provr_logo.svg)
 
-A web-based test application platform. Create accounts, upload question banks, take timed quizzes by difficulty level, track your performance history, and utilize administrative tools featuring interactive usage analytics and content security moderation.
+A web-based test application platform. Create accounts, upload question banks, take timed quizzes by difficulty level, and track your performance history.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Flask](https://img.shields.io/badge/Flask-3.x-lightgrey)
@@ -40,10 +40,8 @@ Return ONLY the JSON array, no additional text.
 ## Stack
 
 - Python 3.14 + Flask 3.x
-- Flask-SQLAlchemy + Flask-Migrate + Bcrypt
+- Flask-SQLAlchemy + Flask-Migrate
 - SQLite (dev) / PostgreSQL (prod)
-- Chart.js (Client-side interactive analytics)
-- Pillow (Profile image handling & reconstruction)
 
 ## Running locally
 
@@ -80,10 +78,10 @@ Return ONLY the JSON array, no additional text.
 ```
 provr/
 ├── app/
-│   ├── blueprints/       # Routes organized by domain (auth, quiz, admin)
-│   ├── models/           # Database models (user, question, quiz, moderation)
-│   ├── static/           # CSS (main.css with dashboard grids), JS, uploads
-│   └── templates/        # HTML templates (including admin panel templates)
+│   ├── blueprints/       # Routes organized by domain
+│   ├── models/           # Database models
+│   ├── static/
+│   └── templates/
 ├── docs/
 │   ├── use-cases.md
 │   └── data-modeling.md
