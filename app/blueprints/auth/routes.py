@@ -121,7 +121,7 @@ def update_picture():
                     action='blocked',
                     content_type='profile_picture',
                     reason=reason,
-                    filename=file.filename
+                    filename=file.filename or 'unknown'
                 )
                 db.session.add(log)
                 db.session.commit()
@@ -141,7 +141,7 @@ def update_picture():
                     action='blocked',
                     content_type='profile_picture',
                     reason=reason,
-                    filename=file.filename
+                    filename=file.filename or 'unknown'
                 )
                 db.session.add(log)
                 db.session.commit()
