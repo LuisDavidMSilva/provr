@@ -2,6 +2,12 @@
 
 {% block title %}Registration Success - Provr{% endblock %}
 
+{% block extra_head %}
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+{% endblock %}
+
 {% block content %}
 <div class="auth-card" style="max-width: 500px; margin: 2rem auto; padding: 2rem; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface);">
     <h2 style="color: var(--success); margin-top: 0;">Registration Successful!</h2>
@@ -18,7 +24,7 @@
     </div>
 
     <div class="alert alert-warning" style="margin-bottom: 2rem;">
-        <strong>⚠️ IMPORTANT:</strong> Keep this key safe. You will need it to reset your password if you ever lose access. For your security, we only store a hashed version of this key, meaning we cannot recover it for you if it is lost.
+        <strong>⚠️ CRITICAL WARNING:</strong> Save this recovery key immediately. This is the <strong>only time</strong> it will be displayed. Once you leave this page, it cannot be shown again or recovered by system administrators, as we only store a secure cryptographic hash of it.
     </div>
 
     <a href="{{ url_for('auth.login') }}" class="btn-primary" style="display: block; text-align: center;">Proceed to Login</a>
