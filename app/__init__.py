@@ -15,7 +15,7 @@ def create_app(config_name='development'):
     config_map = {
         'development': 'config.DevelopmentConfig',
         'production': 'config.ProductionConfig',
-        
+        'testing': 'config.TestingConfig'
     }
     app.config.from_object(config_map.get(config_name, 'config.DevelopmentConfig'))
 

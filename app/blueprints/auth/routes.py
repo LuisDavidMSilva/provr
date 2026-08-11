@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, session, request, make_response
 from app import db, bcrypt
 from app.models.user import User
 from app.models.moderation import ContentFilterConfig, ModerationLog
@@ -37,7 +37,11 @@ def register():
         )
         db.session.add(user)
         db.session.commit()
-        return render_template('auth/register_success.html', recovery_key=recovery_key)
+        response = make_response(render_template('auth/register_success.html', recovery_key=recovery_key))
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
     return render_template('auth/register.html', form=form)
 
 
@@ -86,9 +90,10 @@ def reset_password_request():
         if user and user.username == form.username.data:
             clean_key = form.recovery_key.data.strip().upper()
             if user.recovery_key_hash and bcrypt.check_password_hash(user.recovery_key_hash, clean_key):
-                login_user(user)
-                flash('Access granted using recovery key. Please change your password.', 'info')
-                return redirect(url_for('auth.change_password'))
+                session['reset_email'] = user.email
+                session['reset_recovery_key'] = clean_key
+                flash('Identity verified with recovery key. Please set your new password.', 'info')
+                return redirect(url_for('auth.reset_password'))
         flash('Invalid email, username, or recovery key.', 'danger')
     return render_template('auth/reset_password_request.html', form=form)
 
@@ -170,7 +175,14 @@ def update_picture():
 def reset_password():
     if current_user.is_authenticated:
         return redirect(url_for('quiz.index'))
+    
     form = RecoveryPassword()
+    if request.method == 'GET':
+        if 'reset_email' in session:
+            form.email.data = session.get('reset_email')
+        if 'reset_recovery_key' in session:
+            form.recovery_key.data = session.get('reset_recovery_key')
+
     if form.validate_on_submit():
         user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
         if user:
@@ -183,6 +195,8 @@ def reset_password():
                 hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
                 user.password_hash = hashed_password
                 db.session.commit()
+                session.pop('reset_email', None)
+                session.pop('reset_recovery_key', None)
                 flash('Password reset successfully! You can now log in.', 'success')
                 return redirect(url_for('auth.login'))
         
