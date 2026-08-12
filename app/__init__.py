@@ -17,8 +17,12 @@ def get_locale():
     if lang in ['en', 'pt_BR', 'es']:
         return lang
 
-    if current_user.is_authenticated and current_user.locale:
-        return current_user.locale
+    if current_user.is_authenticated:
+        try:
+            if current_user.locale:
+                return current_user.locale
+        except Exception:
+            pass
 
     session_lang = session.get('lang')
     if session_lang in ['en', 'pt_BR', 'es']:

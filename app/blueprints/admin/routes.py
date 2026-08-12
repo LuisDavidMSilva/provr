@@ -216,3 +216,13 @@ def toggle_admin(user_id):
     status = _("promoted to Admin") if user.is_admin else _("demoted from Admin")
     flash(_('User %(username)s successfully %(status)s!') % {'username': user.username, 'status': status}, 'success')
     return redirect(url_for('admin.performance'))
+
+def _dummy_translations_for_extraction():
+    _('Maximum allowed file size in MB for uploads')
+    _('Comma separated list of blocked words in uploaded question banks')
+    _('Comma separated list of blocked file extensions')
+    _('Max File Size')
+    _('Blocked Keywords')
+    _('Blocked Extensions')
+    _('Profile Picture')
+    _('Question Bank Json')

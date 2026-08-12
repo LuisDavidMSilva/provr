@@ -1,13 +1,9 @@
-# Spanish translations for PROJECT.
-# Copyright (C) 2026 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
-#
+
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-12 00:25-0300\n"
+"POT-Creation-Date: 2026-08-12 01:01-0300\n"
 "PO-Revision-Date: 2026-08-12 00:25-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -42,6 +38,41 @@ msgstr "degradado de Admin"
 #, python-format
 msgid "User %(username)s successfully %(status)s!"
 msgstr "¡Usuario %(username)s %(status)s con éxito!"
+
+#: app/blueprints/admin/routes.py:221
+msgid "Maximum allowed file size in MB for uploads"
+msgstr "Tamaño máximo de archivo permitido en MB para cargas"
+
+#: app/blueprints/admin/routes.py:222
+msgid "Comma separated list of blocked words in uploaded question banks"
+msgstr "Lista separada por comas de palabras bloqueadas en los bancos de preguntas cargados"
+
+#: app/blueprints/admin/routes.py:223
+msgid "Comma separated list of blocked file extensions"
+msgstr "Lista separada por comas de extensiones de archivo bloqueadas"
+
+#: app/blueprints/admin/routes.py:224
+msgid "Max File Size"
+msgstr "Tamaño Máximo de Archivo"
+
+#: app/blueprints/admin/routes.py:225
+#
+msgid "Blocked Keywords"
+msgstr "Palabras Clave Bloqueadas"
+
+#: app/blueprints/admin/routes.py:226
+#
+msgid "Blocked Extensions"
+msgstr "Extensiones Bloqueadas"
+
+#: app/blueprints/admin/routes.py:227 app/blueprints/auth/forms.py:81
+msgid "Profile Picture"
+msgstr "Foto de Perfil"
+
+#: app/blueprints/admin/routes.py:228
+#
+msgid "Question Bank Json"
+msgstr "JSON del Banco de Preguntas"
 
 #: app/blueprints/auth/forms.py:9 app/blueprints/auth/forms.py:59
 #: app/templates/auth/register.html:13
@@ -142,10 +173,6 @@ msgstr "Solicitar Restablecimiento"
 msgid "Reset Password"
 msgstr "Restablecer Contraseña"
 
-#: app/blueprints/auth/forms.py:81
-msgid "Profile Picture"
-msgstr "Foto de Perfil"
-
 #: app/blueprints/auth/forms.py:83
 msgid "Images only!"
 msgstr "¡Solo imágenes!"
@@ -206,7 +233,9 @@ msgstr "Correo electrónico, usuario o clave de recuperación inválidos."
 #: app/blueprints/auth/routes.py:120
 #, python-format
 msgid ""
-msgstr ""
+"Upload blocked: profile picture size (%(size).2fMB) exceeds limit of "
+"%(limit)sMB."
+msgstr "Carga bloqueada: el tamaño de la foto de perfil (%(size).2fMB) excede el límite de %(limit)sMB."
 
 #: app/blueprints/auth/routes.py:140 app/blueprints/quiz/routes.py:61
 #, python-format
@@ -356,7 +385,9 @@ msgstr "Acceso denegado."
 #: app/blueprints/quiz/routes.py:187
 #, python-format
 msgid ""
-msgstr ""
+"Not enough questions. This bank has %(count)s questions for the selected "
+"level."
+msgstr "No hay suficientes preguntas. Este banco tiene %(count)s preguntas para el nivel seleccionado."
 
 #: app/blueprints/quiz/routes.py:222
 msgid "No active quiz session."
@@ -425,7 +456,9 @@ msgstr "Registrarse"
 #: app/templates/base.html:68
 #, python-format
 msgid ""
-msgstr ""
+"Portfolio project by <a "
+"href=\"https://github.com/LuisDavidMSilva\">%(name)s</a>"
+msgstr "Proyecto de portafolio por <a href=\"https://github.com/LuisDavidMSilva\">%(name)s</a>"
 
 #: app/templates/base.html:69 app/templates/terms.html:6
 msgid "Terms of Use"
@@ -437,7 +470,9 @@ msgstr "Términos de Uso - Provr"
 
 #: app/templates/terms.html:8
 msgid ""
-msgstr ""
+"Welcome to Provr! These terms of use govern your use of our website and "
+"services."
+msgstr "¡Bienvenido a Provr! Estos términos de uso regulan el uso de nuestro sitio web y servicios."
 
 #: app/templates/terms.html:9
 msgid "By using Provr, you agree to the following terms:"
@@ -470,7 +505,10 @@ msgstr "No nos hacemos responsables de la pérdida de datos"
 #: app/templates/terms.html:20
 #, python-format
 msgid ""
-msgstr ""
+"If you have any questions or wish to delete your data/confirm its removal"
+" from the database, please contact us at the following email address: <a "
+"href=\"mailto:%(email)s\">%(email)s</a>"
+msgstr "Si tiene alguna pregunta o desea eliminar sus datos/confirmar su eliminación de la base de datos, póngase en contacto con nosotros en la siguiente dirección de correo electrónico: <a href=\"mailto:%(email)s\">%(email)s</a>"
 
 #: app/templates/admin/analytics.html:3
 msgid "Usage Analytics — Provr"
@@ -602,7 +640,10 @@ msgstr "Configuraciones de Seguridad y Filtrado de Contenido"
 
 #: app/templates/admin/moderation.html:24
 msgid ""
-msgstr ""
+"Configure filters to control files and metadata stored on your server and"
+" VPS instance. Define size restrictions, block harmful scripts, and "
+"prohibit executable extensions."
+msgstr "Configure filtros para controlar archivos y metadados almacenados en su servidor e instancia VPS. Defina restricciones de tamaño, bloquee scripts dañinos y prohíba extensiones ejecutables."
 
 #: app/templates/admin/moderation.html:51
 msgid "Save Settings"
@@ -614,7 +655,9 @@ msgstr "Logs de Auditoría de Seguridad (Intentos de Carga Bloqueados)"
 
 #: app/templates/admin/moderation.html:60
 msgid ""
-msgstr ""
+"Real-time logging of upload violations intercepted by the content "
+"filtering engine."
+msgstr "Registro en tiempo real de violaciones de carga interceptadas por el motor de filtrado de contenido."
 
 #: app/templates/admin/moderation.html:66
 msgid "Timestamp"
@@ -660,7 +703,9 @@ msgstr "Seguimiento de Progresión del Usuario"
 
 #: app/templates/admin/performance.html:23
 msgid ""
-msgstr ""
+"Select a user from the table below to view their historical score "
+"progression."
+msgstr "Seleccione un usuario de la tabla de abajo para ver su evolución histórica de puntuaciones."
 
 #: app/templates/admin/performance.html:26
 msgid "Click \"View Progression\" on a user to render their score timeline."
@@ -747,8 +792,9 @@ msgid "Session"
 msgstr "Sesión"
 
 #: app/templates/admin/performance.html:157
-msgid "Score (%)"
-msgstr "Puntuación (%)"
+#
+msgid "Score"
+msgstr "Puntuación"
 
 #: app/templates/auth/change_password.html:3
 msgid "Change Password - Provr"
@@ -804,7 +850,10 @@ msgstr "IMPORTANTE:"
 
 #: app/templates/auth/recovery_key.html:26
 msgid ""
-msgstr ""
+"Copy and save this key somewhere safe. It will not be shown again. We "
+"only store a secure hash, meaning it's impossible for us to retrieve the "
+"original key for you."
+msgstr "Copie y guarde esta clave en un lugar seguro. No se mostrará de nuevo. Solo almacenamos un hash seguro, lo que significa que es imposible para nosotros recuperar la clave original para usted."
 
 #: app/templates/auth/recovery_key.html:36
 #: app/templates/auth/register_success.html:38
@@ -822,7 +871,10 @@ msgstr "Tienes una clave de recuperación configurada."
 
 #: app/templates/auth/recovery_key.html:45
 msgid ""
-msgstr ""
+"For security reasons, we do not display your recovery key on this screen."
+" If you have lost it, you can generate a new one below. This will "
+"invalidate your previous recovery key."
+msgstr "Por razones de seguridad, no mostramos su clave de recuperación en esta pantalla. Si la ha perdido, puede generar una nueva a continuación. Esto invalidará su clave de recuperación anterior."
 
 #: app/templates/auth/recovery_key.html:47
 msgid "You do not have a recovery key configured yet."
@@ -830,7 +882,9 @@ msgstr "Aún no tienes una clave de recuperación configurada."
 
 #: app/templates/auth/recovery_key.html:48
 msgid ""
-msgstr ""
+"It is highly recommended to generate a recovery key. Without it, if you "
+"lose your password, you will not be able to recover your account."
+msgstr "Se recomienda encarecidamente generar una clave de recuperación. Sin ella, si pierde su contraseña, no podrá recuperar su cuenta."
 
 #: app/templates/auth/recovery_key.html:56
 msgid "Enter current password"
@@ -866,7 +920,11 @@ msgstr "ADVERTENCIA CRÍTICA:"
 
 #: app/templates/auth/register_success.html:27
 msgid ""
-msgstr ""
+"Save this recovery key immediately. This is the <strong>only "
+"time</strong> it will be displayed. Once you leave this page, it cannot "
+"be shown again or recovered by system administrators, as we only store a "
+"secure cryptographic hash of it."
+msgstr "Guarde esta clave de recuperación de inmediato. Esta es la <strong>única vez</strong> que se mostrará. Una vez que salga de esta página, no se podrá volver a mostrar ni los administradores del sistema podrán recuperarla, ya que solo almacenamos un hash criptográfico seguro de ella."
 
 #: app/templates/auth/register_success.html:30
 msgid "Proceed to Login"
@@ -977,7 +1035,7 @@ msgstr "Mis Bancos de Preguntas - Provr"
 #, python-format
 msgid "— %(count)s question"
 msgid_plural "— %(count)s questions"
-msgstr "— %(count)s pregunta"
+msgstr[0] "— %(count)s pregunta"
 msgstr[1] ""
 
 #: app/templates/quiz/list.html:16
@@ -1065,4 +1123,7 @@ msgstr "¿Necesita ayuda para formatear su archivo?"
 #: app/templates/quiz/upload.html:30
 msgid "format guide"
 msgstr "guía de formato"
+
+#~ msgid "Score (%)"
+#~ msgstr "Puntuación (%)"
 

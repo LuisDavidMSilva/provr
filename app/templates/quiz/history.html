@@ -13,7 +13,7 @@
                 — {{ _('Score:') }} {{ s.score }}/{{ s.total }}
                 — {{ s.started_at.strftime('%Y-%m-%d %H:%M') }}
                 {% if s.time_limit > 0 %}
-                    — {{ _('Time limit: %(min)s min') % {'min': (s.time_limit // 60)} }}
+                    — {{ _('Time limit: %(min)s min', min=(s.time_limit // 60)) }}
                 {% else %}
                     — {{ _('No time limit') }}
                 {% endif %}
