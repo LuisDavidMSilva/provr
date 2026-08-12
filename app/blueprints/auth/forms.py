@@ -2,102 +2,109 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, StringField, SubmitField
 from flask_wtf.file import FileField, FileAllowed, FileSize
 from wtforms.fields.simple import PasswordField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, Length
+from flask_babel import lazy_gettext as _
 
 class RegistrationForm(FlaskForm):
-    username = StringField('UserName', validators=[
-        DataRequired(),
+    username = StringField(_('Username'), validators=[
+        DataRequired(message=_('This field is required.')),
         Length(min=3, max=80)
     ])
-    email = StringField('Email', validators=[
-        DataRequired(),
-        Email()
+    email = StringField(_('Email'), validators=[
+        DataRequired(message=_('This field is required.')),
+        Email(message=_('Invalid email address.'))
     ])
-    password = PasswordField('Password', validators=[
-        DataRequired(),
+    password = PasswordField(_('Password'), validators=[
+        DataRequired(message=_('This field is required.')),
         Length(min=12, max=128)
     ])
-    confirm_password = PasswordField('Confirm Password', validators=[
-        DataRequired(),
-        EqualTo('password', message='Passwords must match')
+    confirm_password = PasswordField(_('Confirm Password'), validators=[
+        DataRequired(message=_('This field is required.')),
+        EqualTo('password', message=_('Passwords must match.'))
     ])
-    terms = BooleanField('I agree to the Terms of Use', validators=[DataRequired()])
-    submit = SubmitField('Create Account')
+    terms = BooleanField(_('I agree to the Terms of Use'), validators=[
+        DataRequired(message=_('You must agree to the Terms of Use.'))
+    ])
+    submit = SubmitField(_('Create Account'))
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[
-        DataRequired(),
-        Email()
+    email = StringField(_('Email'), validators=[
+        DataRequired(message=_('This field is required.')),
+        Email(message=_('Invalid email address.'))
     ])
-    password = PasswordField('Password', validators=[
-        DataRequired()
+    password = PasswordField(_('Password'), validators=[
+        DataRequired(message=_('This field is required.'))
     ])
-    submit = SubmitField('Login')
+    submit = SubmitField(_('Login'))
 
 class ChangePasswordForm(FlaskForm):
-    current_password = PasswordField('Current Password', validators=[DataRequired()])
-    new_password = PasswordField('New Password', validators=[
-        DataRequired(),
+    current_password = PasswordField(_('Current Password'), validators=[
+        DataRequired(message=_('This field is required.'))
+    ])
+    new_password = PasswordField(_('New Password'), validators=[
+        DataRequired(message=_('This field is required.')),
         Length(min=12, max=128)
     ])
-    confirm_password = PasswordField('Confirm Password', validators=[
-        DataRequired(),
-        EqualTo('new_password', message='Passwords must match')
+    confirm_password = PasswordField(_('Confirm Password'), validators=[
+        DataRequired(message=_('This field is required.')),
+        EqualTo('new_password', message=_('Passwords must match.'))
     ])
-    submit = SubmitField('Change Password')
+    submit = SubmitField(_('Change Password'))
 
 class ResetPasswordRequestForm(FlaskForm):
-    email = StringField('Email', validators=[
-        DataRequired(),
-        Email()
+    email = StringField(_('Email'), validators=[
+        DataRequired(message=_('This field is required.')),
+        Email(message=_('Invalid email address.'))
     ])
-    username = StringField('Username', validators=[
-        DataRequired(),
+    username = StringField(_('Username'), validators=[
+        DataRequired(message=_('This field is required.')),
         Length(min=3, max=80)
     ])
-    recovery_key = StringField('Recovery Key', validators=[
-        DataRequired(),
+    recovery_key = StringField(_('Recovery Key'), validators=[
+        DataRequired(message=_('This field is required.')),
         Length(min=12, max=36)
     ])
-    submit = SubmitField('Request Reset')
+    submit = SubmitField(_('Request Reset'))
 
 class SetNewPassword(FlaskForm):
-    password = PasswordField('Password', validators=[
-        DataRequired(),
+    password = PasswordField(_('Password'), validators=[
+        DataRequired(message=_('This field is required.')),
         Length(min=12, max=128)
     ])
-    confirm_password = PasswordField('Confirm Password', validators=[
-        DataRequired(),
-        EqualTo('password', message='Passwords must match')
+    confirm_password = PasswordField(_('Confirm Password'), validators=[
+        DataRequired(message=_('This field is required.')),
+        EqualTo('password', message=_('Passwords must match.'))
     ])
-    submit = SubmitField('Reset Password')
+    submit = SubmitField(_('Reset Password'))
 
 class UpdateProfilePictureForm(FlaskForm):
-    picture = FileField('Profile Picture', validators=[
-        DataRequired(),
-        FileAllowed(['jpg', 'png', 'jpeg', 'webp'], 'Images only!'),
-        FileSize(max_size=3 * 1024 * 1024, message='File must be less than 3MB')
+    picture = FileField(_('Profile Picture'), validators=[
+        DataRequired(message=_('This field is required.')),
+        FileAllowed(['jpg', 'png', 'jpeg', 'webp'], _('Images only!')),
+        FileSize(max_size=3 * 1024 * 1024, message=_('File must be less than 3MB'))
     ])
-    submit = SubmitField('Update Profile Picture')
+    submit = SubmitField(_('Update Profile Picture'))
 
 class RecoveryPassword(FlaskForm):
-    email = StringField('Email', validators=[
-        DataRequired(),
-        Email()
+    email = StringField(_('Email'), validators=[
+        DataRequired(message=_('This field is required.')),
+        Email(message=_('Invalid email address.'))
     ])
-    recovery_key = StringField('Recovery Key', validators=[
-        DataRequired()
+    recovery_key = StringField(_('Recovery Key'), validators=[
+        DataRequired(message=_('This field is required.'))
     ])
-    password = PasswordField('New Password', validators=[
-        DataRequired(),
+    password = PasswordField(_('New Password'), validators=[
+        DataRequired(message=_('This field is required.')),
         Length(min=12, max=128)
     ])
-    confirm_password = PasswordField('Confirm New Password', validators=[
-        DataRequired(),
-        EqualTo('password', message='Passwords must match')
+    confirm_password = PasswordField(_('Confirm New Password'), validators=[
+        DataRequired(message=_('This field is required.')),
+        EqualTo('password', message=_('Passwords must match.'))
     ])
-    submit = SubmitField('Reset Password')
+    submit = SubmitField(_('Reset Password'))
 
 class GenerateRecoveryKeyForm(FlaskForm):
-    password = PasswordField('Confirm Password', validators=[DataRequired()])
-    submit = SubmitField('Generate Recovery Key')
+    password = PasswordField(_('Confirm Password'), validators=[
+        DataRequired(message=_('This field is required.'))
+    ])
+    submit = SubmitField(_('Generate Recovery Key'))

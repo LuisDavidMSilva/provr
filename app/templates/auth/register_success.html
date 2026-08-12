@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Registration Success - Provr{% endblock %}
+{% block title %}{{ _('Registration Success - Provr') }}{% endblock %}
 
 {% block extra_head %}
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
@@ -10,8 +10,8 @@
 
 {% block content %}
 <div class="auth-card" style="max-width: 500px; margin: 2rem auto; padding: 2rem; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface);">
-    <h2 style="color: var(--success); margin-top: 0;">Registration Successful!</h2>
-    <p>Your account has been created. Below is your password recovery key.</p>
+    <h2 style="color: var(--success); margin-top: 0;">{{ _('Registration Successful!') }}</h2>
+    <p>{{ _('Your account has been created. Below is your password recovery key.') }}</p>
     
     <div style="background-color: var(--bg); padding: 1rem; border-radius: 4px; border: 1px solid var(--border); margin: 1.5rem 0; text-align: center;">
         <span style="font-family: monospace; font-size: 1.5rem; letter-spacing: 2px; font-weight: bold; color: var(--text);" id="recovery-key">{{ recovery_key }}</span>
@@ -19,15 +19,15 @@
 
     <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
         <button onclick="copyToClipboard()" class="btn-primary" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-            📋 Copy Key
+            📋 {{ _('Copy Key') }}
         </button>
     </div>
 
     <div class="alert alert-warning" style="margin-bottom: 2rem;">
-        <strong>⚠️ CRITICAL WARNING:</strong> Save this recovery key immediately. This is the <strong>only time</strong> it will be displayed. Once you leave this page, it cannot be shown again or recovered by system administrators, as we only store a secure cryptographic hash of it.
+        <strong>⚠️ {{ _('CRITICAL WARNING:') }}</strong> {{ _('Save this recovery key immediately. This is the <strong>only time</strong> it will be displayed. Once you leave this page, it cannot be shown again or recovered by system administrators, as we only store a secure cryptographic hash of it.') }}
     </div>
 
-    <a href="{{ url_for('auth.login') }}" class="btn-primary" style="display: block; text-align: center;">Proceed to Login</a>
+    <a href="{{ url_for('auth.login') }}" class="btn-primary" style="display: block; text-align: center;">{{ _('Proceed to Login') }}</a>
 </div>
 
 <script>
@@ -35,7 +35,7 @@ function copyToClipboard() {
     const keyElement = document.getElementById('recovery-key');
     const keyText = keyElement.innerText;
     navigator.clipboard.writeText(keyText).then(() => {
-        alert('Recovery key copied to clipboard!');
+        alert('{{ _("Recovery key copied to clipboard!") }}');
     }).catch(err => {
         console.error('Could not copy text: ', err);
     });

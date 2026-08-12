@@ -8,6 +8,7 @@ from app.models.user import User
 from app.models.question import QuestionBank, Question
 from app.models.quiz import QuizSession, QuizAnswer
 from app.models.moderation import ContentFilterConfig, ModerationLog
+from flask_babel import gettext as _
 from . import admin_bp
 
 def admin_required(f):
@@ -185,7 +186,7 @@ def moderation():
             cfg.is_active = is_active
             
         db.session.commit()
-        flash('Content Moderation settings updated successfully!', 'success')
+        flash(_('Content Moderation settings updated successfully!'), 'success')
         return redirect(url_for('admin.moderation'))
 
     logs = db.session.scalars(
@@ -200,18 +201,18 @@ def moderation():
 def toggle_admin(user_id):
     user = db.get_or_404(User, user_id)
     if user.id == current_user.id:
-        flash('You cannot remove admin rights from yourself.', 'danger')
+        flash(_('You cannot remove admin rights from yourself.'), 'danger')
         return redirect(url_for('admin.performance'))
 
     # If the user is currently an admin, make sure they are not the ONLY admin in the system.
     if user.is_admin:
         admin_count = db.session.scalar(db.select(db.func.count(User.id)).filter_by(is_admin=True))
         if admin_count <= 1:
-            flash('Cannot demote the only remaining administrator in the system.', 'danger')
+            flash(_('Cannot demote the only remaining administrator in the system.'), 'danger')
             return redirect(url_for('admin.performance'))
 
     user.is_admin = not user.is_admin
     db.session.commit()
-    status = "promoted to Admin" if user.is_admin else "demoted from Admin"
-    flash(f'User {user.username} successfully {status}!', 'success')
+    status = _("promoted to Admin") if user.is_admin else _("demoted from Admin")
+    flash(_('User %(username)s successfully %(status)s!') % {'username': user.username, 'status': status}, 'success')
     return redirect(url_for('admin.performance'))

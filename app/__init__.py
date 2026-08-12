@@ -1,13 +1,30 @@
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, redirect, render_template, url_for, session, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
+from flask_babel import Babel
 
 db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+babel = Babel()
+
+def get_locale():
+
+    lang = request.args.get('lang')
+    if lang in ['en', 'pt_BR', 'es']:
+        return lang
+
+    if current_user.is_authenticated and current_user.locale:
+        return current_user.locale
+
+    session_lang = session.get('lang')
+    if session_lang in ['en', 'pt_BR', 'es']:
+        return session_lang
+
+    return request.accept_languages.best_match(['en', 'pt_BR', 'es']) or 'en'
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -23,6 +40,8 @@ def create_app(config_name='development'):
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    babel.init_app(app, locale_selector=get_locale)
+    app.context_processor(lambda: dict(get_locale=get_locale))
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Please log in to access this page.'
     login_manager.login_message_category = 'danger'

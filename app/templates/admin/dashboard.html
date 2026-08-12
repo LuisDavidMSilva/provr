@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Admin Dashboard — Provr{% endblock %}
+{% block title %}{{ _('Admin Dashboard — Provr') }}{% endblock %}
 
 {% block content %}
 <div class="admin-container">
     <div class="admin-header">
-        <h1>Admin Control Panel</h1>
-        <p class="subtitle">System overview, metrics, and security audits</p>
+        <h1>{{ _('Admin Control Panel') }}</h1>
+        <p class="subtitle">{{ _('System overview, metrics, and security audits') }}</p>
     </div>
 
     <!-- Admin Sub-navigation -->
     <div class="admin-tabs">
-        <a href="{{ url_for('admin.dashboard') }}" class="tab-btn active">Overview</a>
-        <a href="{{ url_for('admin.analytics') }}" class="tab-btn">Usage Analytics</a>
-        <a href="{{ url_for('admin.performance') }}" class="tab-btn">User Performance</a>
-        <a href="{{ url_for('admin.moderation') }}" class="tab-btn">Content Security</a>
+        <a href="{{ url_for('admin.dashboard') }}" class="tab-btn active">{{ _('Overview') }}</a>
+        <a href="{{ url_for('admin.analytics') }}" class="tab-btn">{{ _('Usage Analytics') }}</a>
+        <a href="{{ url_for('admin.performance') }}" class="tab-btn">{{ _('User Performance') }}</a>
+        <a href="{{ url_for('admin.moderation') }}" class="tab-btn">{{ _('Content Security') }}</a>
     </div>
 
     <!-- Metrics Cards Grid -->
@@ -22,33 +22,33 @@
         <div class="metric-card">
             <div class="metric-icon users-icon">👥</div>
             <div class="metric-info">
-                <h3>Total Users</h3>
+                <h3>{{ _('Total Users') }}</h3>
                 <p class="metric-value">{{ total_users }}</p>
-                <p class="metric-desc">Registered accounts</p>
+                <p class="metric-desc">{{ _('Registered accounts') }}</p>
             </div>
         </div>
         <div class="metric-card">
             <div class="metric-icon banks-icon">📁</div>
             <div class="metric-info">
-                <h3>Question Banks</h3>
+                <h3>{{ _('Question Banks') }}</h3>
                 <p class="metric-value">{{ total_banks }}</p>
-                <p class="metric-desc">Created by users</p>
+                <p class="metric-desc">{{ _('Created by users') }}</p>
             </div>
         </div>
         <div class="metric-card">
             <div class="metric-icon sessions-icon">📝</div>
             <div class="metric-info">
-                <h3>Quiz Sessions</h3>
+                <h3>{{ _('Quiz Sessions') }}</h3>
                 <p class="metric-value">{{ total_sessions }}</p>
-                <p class="metric-desc">Simulations completed</p>
+                <p class="metric-desc">{{ _('Simulations completed') }}</p>
             </div>
         </div>
         <div class="metric-card {% if blocked_attempts > 0 %}warning-card{% endif %}">
             <div class="metric-icon security-icon">🛡️</div>
             <div class="metric-info">
-                <h3>Blocked Uploads</h3>
+                <h3>{{ _('Blocked Uploads') }}</h3>
                 <p class="metric-value">{{ blocked_attempts }}</p>
-                <p class="metric-desc">Security events logged</p>
+                <p class="metric-desc">{{ _('Security events logged') }}</p>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
     <!-- Recent Actions & Security Alerts -->
     <div class="dashboard-tables-grid">
         <div class="section-card">
-            <h2>Recent User Registrations</h2>
+            <h2>{{ _('Recent User Registrations') }}</h2>
             <ul class="recent-list">
                 {% for user in recent_users %}
                 <li>
@@ -70,28 +70,28 @@
                     <span class="date-tag">{{ user.created_at.strftime('%Y-%m-%d') }}</span>
                 </li>
                 {% else %}
-                <li class="empty-state">No new users registered recently.</li>
+                <li class="empty-state">{{ _('No new users registered recently.') }}</li>
                 {% endfor %}
             </ul>
         </div>
 
         <div class="section-card">
-            <h2>Recent Security Events</h2>
+            <h2>{{ _('Recent Security Events') }}</h2>
             <ul class="recent-list">
                 {% for log in recent_logs %}
                 <li class="log-item-alert">
                     <div class="log-header">
                         <span class="log-action blocked-tag">{{ log.action.upper() }}</span>
-                        <span class="log-user">by {{ log.username }}</span>
+                        <span class="log-user">{{ _('by %(username)s') % {'username': log.username} }}</span>
                     </div>
                     <p class="log-reason">{{ log.reason }}</p>
                     <div class="log-footer">
-                        <span class="log-file">File: {{ log.filename }}</span>
+                        <span class="log-file">{{ _('File: %(filename)s') % {'filename': log.filename} }}</span>
                         <span class="log-time">{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
                     </div>
                 </li>
                 {% else %}
-                <li class="empty-state">No security alerts logged. Server is safe.</li>
+                <li class="empty-state">{{ _('No security alerts logged. Server is safe.') }}</li>
                 {% endfor %}
             </ul>
         </div>
