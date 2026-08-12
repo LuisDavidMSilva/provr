@@ -3,7 +3,7 @@
 {% block title %}{{ _('Configure Quiz - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>{{ _('Configure Quiz — %(name)s') % {'name': bank.name} }}</h2>
+<h2>{{ _('Configure Quiz — %(name)s', name=bank.name) }}</h2>
 
 <form method="POST">
     {{ form.hidden_tag() }}

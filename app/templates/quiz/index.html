@@ -3,7 +3,7 @@
 {% block title %}{{ _('Dashboard - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>{{ _('Welcome, %(username)s!') % {'username': current_user.username} }}</h2>
+<h2>{{ _('Welcome, %(username)s!', username=current_user.username) }}</h2>
 <p style="color: var(--text-muted); margin-bottom: 2rem;">{{ _('What do you want to do today?') }}</p>
 
 <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">

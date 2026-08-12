@@ -82,11 +82,11 @@
                 <li class="log-item-alert">
                     <div class="log-header">
                         <span class="log-action blocked-tag">{{ log.action.upper() }}</span>
-                        <span class="log-user">{{ _('by %(username)s') % {'username': log.username} }}</span>
+                        <span class="log-user">{{ _('by %(username)s', username=log.username) }}</span>
                     </div>
                     <p class="log-reason">{{ log.reason }}</p>
                     <div class="log-footer">
-                        <span class="log-file">{{ _('File: %(filename)s') % {'filename': log.filename} }}</span>
+                        <span class="log-file">{{ _('File: %(filename)s', filename=log.filename) }}</span>
                         <span class="log-time">{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
                     </div>
                 </li>

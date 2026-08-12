@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-12 00:25-0300\n"
+"POT-Creation-Date: 2026-08-12 01:01-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,38 @@ msgstr ""
 #: app/blueprints/admin/routes.py:217
 #, python-format
 msgid "User %(username)s successfully %(status)s!"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:221
+msgid "Maximum allowed file size in MB for uploads"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:222
+msgid "Comma separated list of blocked words in uploaded question banks"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:223
+msgid "Comma separated list of blocked file extensions"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:224
+msgid "Max File Size"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:225
+msgid "Blocked Keywords"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:226
+msgid "Blocked Extensions"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:227 app/blueprints/auth/forms.py:81
+msgid "Profile Picture"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:228
+msgid "Question Bank Json"
 msgstr ""
 
 #: app/blueprints/auth/forms.py:9 app/blueprints/auth/forms.py:59
@@ -139,10 +171,6 @@ msgstr ""
 #: app/blueprints/auth/forms.py:78 app/blueprints/auth/forms.py:104
 #: app/templates/auth/reset_password.html:6
 msgid "Reset Password"
-msgstr ""
-
-#: app/blueprints/auth/forms.py:81
-msgid "Profile Picture"
 msgstr ""
 
 #: app/blueprints/auth/forms.py:83
@@ -764,7 +792,7 @@ msgid "Session"
 msgstr ""
 
 #: app/templates/admin/performance.html:157
-msgid "Score (%)"
+msgid "Score"
 msgstr ""
 
 #: app/templates/auth/change_password.html:3
