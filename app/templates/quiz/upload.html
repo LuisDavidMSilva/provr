@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Upload Question Bank - Provr{% endblock %}
+{% block title %}{{ _('Upload Question Bank - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>Upload Question Bank</h2>
+<h2>{{ _('Upload Question Bank') }}</h2>
 
 <form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
 
     <div>
         {{ form.name.label }}
-        {{ form.name(placeholder="Bank name") }}
+        {{ form.name(placeholder=_('Bank name')) }}
         {% for error in form.name.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -27,6 +27,6 @@
     {{ form.submit() }}
 </form>
 
-<p>Need help formatting your file? Check the <a target="_blank" rel="noopener noreferrer" href="https://github.com/LuisDavidMSilva/provr?tab=readme-ov-file#question-bank-prompt-template">format guide</a>.</p>
-<a href="{{ url_for('quiz.list_banks') }}">Back to My Banks</a>
+<p>{{ _('Need help formatting your file?') }} <a target="_blank" rel="noopener noreferrer" href="https://github.com/LuisDavidMSilva/provr?tab=readme-ov-file#question-bank-prompt-template">{{ _('format guide') }}</a>.</p>
+<a href="{{ url_for('quiz.list_banks') }}">{{ _('Back to My Banks') }}</a>
 {% endblock %}

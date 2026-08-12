@@ -1,0 +1,1097 @@
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-12 00:25-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: app/blueprints/admin/routes.py:189
+msgid "Content Moderation settings updated successfully!"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:204
+msgid "You cannot remove admin rights from yourself."
+msgstr ""
+
+#: app/blueprints/admin/routes.py:211
+msgid "Cannot demote the only remaining administrator in the system."
+msgstr ""
+
+#: app/blueprints/admin/routes.py:216
+msgid "promoted to Admin"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:216
+msgid "demoted from Admin"
+msgstr ""
+
+#: app/blueprints/admin/routes.py:217
+#, python-format
+msgid "User %(username)s successfully %(status)s!"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:9 app/blueprints/auth/forms.py:59
+#: app/templates/auth/register.html:13
+#: app/templates/auth/reset_password_request.html:21
+msgid "Username"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:10 app/blueprints/auth/forms.py:14
+#: app/blueprints/auth/forms.py:18 app/blueprints/auth/forms.py:22
+#: app/blueprints/auth/forms.py:32 app/blueprints/auth/forms.py:36
+#: app/blueprints/auth/forms.py:42 app/blueprints/auth/forms.py:45
+#: app/blueprints/auth/forms.py:49 app/blueprints/auth/forms.py:56
+#: app/blueprints/auth/forms.py:60 app/blueprints/auth/forms.py:64
+#: app/blueprints/auth/forms.py:71 app/blueprints/auth/forms.py:75
+#: app/blueprints/auth/forms.py:82 app/blueprints/auth/forms.py:90
+#: app/blueprints/auth/forms.py:94 app/blueprints/auth/forms.py:97
+#: app/blueprints/auth/forms.py:101 app/blueprints/auth/forms.py:108
+#: app/blueprints/quiz/forms.py:9 app/blueprints/quiz/forms.py:13
+#: app/blueprints/quiz/forms.py:24
+msgid "This field is required."
+msgstr ""
+
+#: app/blueprints/auth/forms.py:13 app/blueprints/auth/forms.py:31
+#: app/blueprints/auth/forms.py:55 app/blueprints/auth/forms.py:89
+#: app/templates/auth/login.html:13 app/templates/auth/register.html:21
+#: app/templates/auth/reset_password.html:13
+#: app/templates/auth/reset_password_request.html:13
+msgid "Email"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:15 app/blueprints/auth/forms.py:33
+#: app/blueprints/auth/forms.py:57 app/blueprints/auth/forms.py:91
+msgid "Invalid email address."
+msgstr ""
+
+#: app/blueprints/auth/forms.py:17 app/blueprints/auth/forms.py:35
+#: app/blueprints/auth/forms.py:70 app/templates/auth/login.html:21
+#: app/templates/auth/register.html:29
+msgid "Password"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:21 app/blueprints/auth/forms.py:48
+#: app/blueprints/auth/forms.py:74 app/blueprints/auth/forms.py:107
+#: app/templates/auth/register.html:37
+msgid "Confirm Password"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:23 app/blueprints/auth/forms.py:50
+#: app/blueprints/auth/forms.py:76 app/blueprints/auth/forms.py:102
+msgid "Passwords must match."
+msgstr ""
+
+#: app/blueprints/auth/forms.py:25
+msgid "I agree to the Terms of Use"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:26
+msgid "You must agree to the Terms of Use."
+msgstr ""
+
+#: app/blueprints/auth/forms.py:28 app/templates/auth/register.html:6
+msgid "Create Account"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:38 app/templates/auth/login.html:6
+#: app/templates/auth/register.html:55
+#: app/templates/auth/reset_password.html:46
+#: app/templates/auth/reset_password_request.html:38 app/templates/base.html:33
+msgid "Login"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:41 app/templates/auth/change_password.html:13
+msgid "Current Password"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:44 app/blueprints/auth/forms.py:96
+#: app/templates/auth/change_password.html:21
+#: app/templates/auth/reset_password.html:29
+msgid "New Password"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:52 app/templates/auth/change_password.html:6
+#: app/templates/base.html:23
+msgid "Change Password"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:63 app/blueprints/auth/forms.py:93
+#: app/templates/auth/recovery_key.html:7 app/templates/base.html:25
+msgid "Recovery Key"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:67
+msgid "Request Reset"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:78 app/blueprints/auth/forms.py:104
+#: app/templates/auth/reset_password.html:6
+msgid "Reset Password"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:81
+msgid "Profile Picture"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:83
+msgid "Images only!"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:84 app/blueprints/quiz/forms.py:15
+msgid "File must be less than 3MB"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:86 app/templates/auth/update_picture.html:6
+msgid "Update Profile Picture"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:100 app/templates/auth/change_password.html:29
+#: app/templates/auth/reset_password.html:37
+msgid "Confirm New Password"
+msgstr ""
+
+#: app/blueprints/auth/forms.py:110
+msgid "Generate Recovery Key"
+msgstr ""
+
+#: app/blueprints/auth/routes.py:16 app/blueprints/auth/routes.py:51
+msgid "You are already logged in."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:21
+msgid "Email already registered. Please log in."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:25
+msgid "Username already taken. Please choose another."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:58
+msgid "Logged in successfully!"
+msgstr ""
+
+#: app/blueprints/auth/routes.py:60
+msgid "Invalid email or password."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:80
+msgid "Password updated successfully!"
+msgstr ""
+
+#: app/blueprints/auth/routes.py:82
+msgid "Current password is incorrect."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:95
+msgid "Identity verified with recovery key. Please set your new password."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:97
+msgid "Invalid email, username, or recovery key."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:120
+#, python-format
+msgid ""
+"Upload blocked: profile picture size (%(size).2fMB) exceeds limit of "
+"%(limit)sMB."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:140 app/blueprints/quiz/routes.py:61
+#, python-format
+msgid "Upload blocked: file extension '.%(ext)s' is prohibited."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:167
+msgid "Profile picture updated successfully!"
+msgstr ""
+
+#: app/blueprints/auth/routes.py:188
+msgid "This account does not have a recovery key configured."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:198
+msgid "Password reset successfully! You can now log in."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:201
+msgid "Invalid email or recovery key."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:216
+msgid "New recovery key generated successfully!"
+msgstr ""
+
+#: app/blueprints/auth/routes.py:218
+msgid "Incorrect password."
+msgstr ""
+
+#: app/blueprints/auth/routes.py:230
+msgid "Language updated successfully!"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:8
+msgid "Bank"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:12
+msgid "Question Bank File"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:14
+msgid "JSON or TXT files only!"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:17
+msgid "Upload"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:20 app/templates/quiz/list.html:22
+msgid "Delete"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:23
+msgid "Number of Questions"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:25
+msgid "Between 1 and 100 questions"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:27
+msgid "Level"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:28
+msgid "All levels"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:29
+msgid "Easy"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:30
+msgid "Medium"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:31
+msgid "Hard"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:33
+msgid "Time Limit"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:34
+msgid "No limit"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:35
+msgid "10 minutes"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:36
+msgid "30 minutes"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:37
+msgid "1 hour"
+msgstr ""
+
+#: app/blueprints/quiz/forms.py:39 app/templates/quiz/list.html:18
+msgid "Start Quiz"
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:41
+#, python-format
+msgid "Upload blocked: file size (%(size).2fMB) exceeds limit of %(limit)sMB."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:85
+#, python-format
+msgid "Upload blocked: file contains forbidden keywords (%(keywords)s)."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:102
+msgid "Invalid format: file must contain a JSON array."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:115
+msgid "One or more questions have missing fields."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:129
+#, python-format
+msgid "Question bank \"%(name)s\" uploaded successfully!"
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:133
+msgid "Invalid JSON file. Please check the file format."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:152
+msgid "You are not allowed to delete this bank."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:156
+#, python-format
+msgid "Question bank \"%(name)s\" deleted successfully."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:170 app/blueprints/quiz/routes.py:321
+msgid "Access denied."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:187
+#, python-format
+msgid ""
+"Not enough questions. This bank has %(count)s questions for the selected "
+"level."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:222
+msgid "No active quiz session."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:227
+msgid "Quiz session not found."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:250
+msgid "Time is up! Your quiz was automatically submitted."
+msgstr ""
+
+#: app/blueprints/quiz/routes.py:260
+msgid "Please select an answer."
+msgstr ""
+
+#: app/templates/404.html:5
+msgid "404 - Page Not Found"
+msgstr ""
+
+#: app/templates/404.html:6
+msgid "The page you are looking for does not exist."
+msgstr ""
+
+#: app/templates/404.html:7 app/templates/500.html:7
+msgid "Back to Home"
+msgstr ""
+
+#: app/templates/500.html:5
+msgid "500 - Internal Server Error"
+msgstr ""
+
+#: app/templates/500.html:6
+msgid "Something went wrong on our end. Please try again later."
+msgstr ""
+
+#: app/templates/base.html:22 app/templates/quiz/result.html:42
+msgid "Dashboard"
+msgstr ""
+
+#: app/templates/base.html:24
+msgid "Update Picture"
+msgstr ""
+
+#: app/templates/base.html:26
+msgid "My Banks"
+msgstr ""
+
+#: app/templates/base.html:27 app/templates/quiz/index.html:11
+msgid "My Results"
+msgstr ""
+
+#: app/templates/base.html:29
+msgid "Admin Panel"
+msgstr ""
+
+#: app/templates/base.html:31
+msgid "Logout"
+msgstr ""
+
+#: app/templates/auth/login.html:30 app/templates/base.html:34
+msgid "Register"
+msgstr ""
+
+#: app/templates/base.html:68
+#, python-format
+msgid ""
+"Portfolio project by <a "
+"href=\"https://github.com/LuisDavidMSilva\">%(name)s</a>"
+msgstr ""
+
+#: app/templates/base.html:69 app/templates/terms.html:6
+msgid "Terms of Use"
+msgstr ""
+
+#: app/templates/terms.html:3
+msgid "Terms of Use - Provr"
+msgstr ""
+
+#: app/templates/terms.html:8
+msgid ""
+"Welcome to Provr! These terms of use govern your use of our website and "
+"services."
+msgstr ""
+
+#: app/templates/terms.html:9
+msgid "By using Provr, you agree to the following terms:"
+msgstr ""
+
+#: app/templates/terms.html:11
+msgid "Non-commercial portfolio project"
+msgstr ""
+
+#: app/templates/terms.html:12
+msgid "Data may be deleted without prior notice"
+msgstr ""
+
+#: app/templates/terms.html:13
+msgid "Do not use real data (primary personal email, reused password)"
+msgstr ""
+
+#: app/templates/terms.html:14
+msgid "Profile photos are stored on the project server"
+msgstr ""
+
+#: app/templates/terms.html:15
+msgid "No guarantee of availability or continuity"
+msgstr ""
+
+#: app/templates/terms.html:16
+msgid "We are not responsible for data loss"
+msgstr ""
+
+#: app/templates/terms.html:20
+#, python-format
+msgid ""
+"If you have any questions or wish to delete your data/confirm its removal"
+" from the database, please contact us at the following email address: <a "
+"href=\"mailto:%(email)s\">%(email)s</a>"
+msgstr ""
+
+#: app/templates/admin/analytics.html:3
+msgid "Usage Analytics — Provr"
+msgstr ""
+
+#: app/templates/admin/analytics.html:8 app/templates/admin/dashboard.html:8
+#: app/templates/admin/moderation.html:8 app/templates/admin/performance.html:8
+msgid "Admin Control Panel"
+msgstr ""
+
+#: app/templates/admin/analytics.html:9 app/templates/admin/dashboard.html:9
+#: app/templates/admin/moderation.html:9 app/templates/admin/performance.html:9
+msgid "System overview, metrics, and security audits"
+msgstr ""
+
+#: app/templates/admin/analytics.html:14 app/templates/admin/dashboard.html:14
+#: app/templates/admin/moderation.html:14
+#: app/templates/admin/performance.html:14
+msgid "Overview"
+msgstr ""
+
+#: app/templates/admin/analytics.html:15 app/templates/admin/dashboard.html:15
+#: app/templates/admin/moderation.html:15
+#: app/templates/admin/performance.html:15
+msgid "Usage Analytics"
+msgstr ""
+
+#: app/templates/admin/analytics.html:16 app/templates/admin/dashboard.html:16
+#: app/templates/admin/moderation.html:16
+#: app/templates/admin/performance.html:16
+msgid "User Performance"
+msgstr ""
+
+#: app/templates/admin/analytics.html:17 app/templates/admin/dashboard.html:17
+#: app/templates/admin/moderation.html:17
+#: app/templates/admin/performance.html:17
+msgid "Content Security"
+msgstr ""
+
+#: app/templates/admin/analytics.html:24
+msgid "Cumulative User Growth"
+msgstr ""
+
+#: app/templates/admin/analytics.html:32
+msgid "New User Registrations (Daily)"
+msgstr ""
+
+#: app/templates/admin/analytics.html:40
+msgid "Question Banks per User"
+msgstr ""
+
+#: app/templates/admin/analytics.html:48
+msgid "Quizzes Completed per Week"
+msgstr ""
+
+#: app/templates/admin/analytics.html:97 app/templates/admin/dashboard.html:25
+msgid "Total Users"
+msgstr ""
+
+#: app/templates/admin/analytics.html:124
+msgid "New Users"
+msgstr ""
+
+#: app/templates/admin/analytics.html:147 app/templates/admin/dashboard.html:33
+msgid "Question Banks"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:3
+msgid "Admin Dashboard — Provr"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:27
+msgid "Registered accounts"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:35
+msgid "Created by users"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:41
+msgid "Quiz Sessions"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:43
+msgid "Simulations completed"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:49
+msgid "Blocked Uploads"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:51
+msgid "Security events logged"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:59
+msgid "Recent User Registrations"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:73
+msgid "No new users registered recently."
+msgstr ""
+
+#: app/templates/admin/dashboard.html:79
+msgid "Recent Security Events"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:85
+#, python-format
+msgid "by %(username)s"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:89
+#, python-format
+msgid "File: %(filename)s"
+msgstr ""
+
+#: app/templates/admin/dashboard.html:94
+msgid "No security alerts logged. Server is safe."
+msgstr ""
+
+#: app/templates/admin/moderation.html:3
+msgid "Content Security & Filtering — Provr"
+msgstr ""
+
+#: app/templates/admin/moderation.html:23
+msgid "Content Security & Filtering Configurations"
+msgstr ""
+
+#: app/templates/admin/moderation.html:24
+msgid ""
+"Configure filters to control files and metadata stored on your server and"
+" VPS instance. Define size restrictions, block harmful scripts, and "
+"prohibit executable extensions."
+msgstr ""
+
+#: app/templates/admin/moderation.html:51
+msgid "Save Settings"
+msgstr ""
+
+#: app/templates/admin/moderation.html:59
+msgid "Security Audit Logs (Blocked Upload Attempts)"
+msgstr ""
+
+#: app/templates/admin/moderation.html:60
+msgid ""
+"Real-time logging of upload violations intercepted by the content "
+"filtering engine."
+msgstr ""
+
+#: app/templates/admin/moderation.html:66
+msgid "Timestamp"
+msgstr ""
+
+#: app/templates/admin/moderation.html:67
+#: app/templates/admin/performance.html:39
+#: app/templates/admin/performance.html:61
+msgid "User"
+msgstr ""
+
+#: app/templates/admin/moderation.html:68
+msgid "File Name"
+msgstr ""
+
+#: app/templates/admin/moderation.html:69
+msgid "Content Type"
+msgstr ""
+
+#: app/templates/admin/moderation.html:70
+msgid "Reason for Block"
+msgstr ""
+
+#: app/templates/admin/moderation.html:71
+msgid "Action Taken"
+msgstr ""
+
+#: app/templates/admin/moderation.html:80
+msgid "Deleted"
+msgstr ""
+
+#: app/templates/admin/moderation.html:95
+msgid "🎉 Excellent! No upload security events logged."
+msgstr ""
+
+#: app/templates/admin/performance.html:3
+msgid "User Performance & Progression — Provr"
+msgstr ""
+
+#: app/templates/admin/performance.html:22
+msgid "User Progression Tracker"
+msgstr ""
+
+#: app/templates/admin/performance.html:23
+msgid ""
+"Select a user from the table below to view their historical score "
+"progression."
+msgstr ""
+
+#: app/templates/admin/performance.html:26
+msgid "Click \"View Progression\" on a user to render their score timeline."
+msgstr ""
+
+#: app/templates/admin/performance.html:34
+msgid "User Performance Summary"
+msgstr ""
+
+#: app/templates/admin/performance.html:40
+msgid "Role"
+msgstr ""
+
+#: app/templates/admin/performance.html:41
+msgid "Quizzes"
+msgstr ""
+
+#: app/templates/admin/performance.html:42
+msgid "Questions"
+msgstr ""
+
+#: app/templates/admin/performance.html:43
+msgid "Correct Answers"
+msgstr ""
+
+#: app/templates/admin/performance.html:44
+msgid "Avg Score"
+msgstr ""
+
+#: app/templates/admin/performance.html:45
+msgid "Actions"
+msgstr ""
+
+#: app/templates/admin/performance.html:61
+msgid "Admin"
+msgstr ""
+
+#: app/templates/admin/performance.html:78
+msgid "View Progression"
+msgstr ""
+
+#: app/templates/admin/performance.html:81
+msgid "Are you sure you want to change this user's role?"
+msgstr ""
+
+#: app/templates/admin/performance.html:83
+msgid "Demote"
+msgstr ""
+
+#: app/templates/admin/performance.html:83
+msgid "Promote Admin"
+msgstr ""
+
+#: app/templates/admin/performance.html:91
+msgid "No users registered in the system."
+msgstr ""
+
+#: app/templates/admin/performance.html:129
+msgid "Progression Tracker: "
+msgstr ""
+
+#: app/templates/admin/performance.html:130
+msgid "This user hasn't completed any quiz sessions yet."
+msgstr ""
+
+#: app/templates/admin/performance.html:133
+msgid "has no quiz history to track."
+msgstr ""
+
+#: app/templates/admin/performance.html:140
+msgid "Progression: "
+msgstr ""
+
+#: app/templates/admin/performance.html:141
+msgid "Tracking score evolution over "
+msgstr ""
+
+#: app/templates/admin/performance.html:141
+msgid "completed quiz sessions."
+msgstr ""
+
+#: app/templates/admin/performance.html:144
+msgid "Session"
+msgstr ""
+
+#: app/templates/admin/performance.html:157
+msgid "Score (%)"
+msgstr ""
+
+#: app/templates/auth/change_password.html:3
+msgid "Change Password - Provr"
+msgstr ""
+
+#: app/templates/auth/change_password.html:37
+#: app/templates/auth/recovery_key.html:29
+#: app/templates/auth/update_picture.html:22 app/templates/quiz/history.html:28
+#: app/templates/quiz/list.html:31
+msgid "Back to Dashboard"
+msgstr ""
+
+#: app/templates/auth/login.html:3
+msgid "Login - Provr"
+msgstr ""
+
+#: app/templates/auth/login.html:30
+msgid "Don't have an account?"
+msgstr ""
+
+#: app/templates/auth/login.html:31
+msgid "Forgot password?"
+msgstr ""
+
+#: app/templates/auth/login.html:31
+msgid "Reset here"
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:3
+msgid "Recovery Key - Provr"
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:8
+msgid "Manage your password recovery key."
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:12
+msgid "Success:"
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:12
+msgid "A new recovery key has been generated."
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:21
+#: app/templates/auth/register_success.html:22
+msgid "Copy Key"
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:26
+msgid "IMPORTANT:"
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:26
+msgid ""
+"Copy and save this key somewhere safe. It will not be shown again. We "
+"only store a secure hash, meaning it's impossible for us to retrieve the "
+"original key for you."
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:36
+#: app/templates/auth/register_success.html:38
+msgid "Recovery key copied to clipboard!"
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:44
+#: app/templates/auth/recovery_key.html:47
+msgid "Status:"
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:44
+msgid "You have a recovery key configured."
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:45
+msgid ""
+"For security reasons, we do not display your recovery key on this screen."
+" If you have lost it, you can generate a new one below. This will "
+"invalidate your previous recovery key."
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:47
+msgid "You do not have a recovery key configured yet."
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:48
+msgid ""
+"It is highly recommended to generate a recovery key. Without it, if you "
+"lose your password, you will not be able to recover your account."
+msgstr ""
+
+#: app/templates/auth/recovery_key.html:56
+msgid "Enter current password"
+msgstr ""
+
+#: app/templates/auth/register.html:3
+msgid "Register - Provr"
+msgstr ""
+
+#: app/templates/auth/register.html:46
+msgid "Read Terms of Use"
+msgstr ""
+
+#: app/templates/auth/register.html:55
+msgid "Already have an account?"
+msgstr ""
+
+#: app/templates/auth/register_success.html:3
+msgid "Registration Success - Provr"
+msgstr ""
+
+#: app/templates/auth/register_success.html:13
+msgid "Registration Successful!"
+msgstr ""
+
+#: app/templates/auth/register_success.html:14
+msgid "Your account has been created. Below is your password recovery key."
+msgstr ""
+
+#: app/templates/auth/register_success.html:27
+msgid "CRITICAL WARNING:"
+msgstr ""
+
+#: app/templates/auth/register_success.html:27
+msgid ""
+"Save this recovery key immediately. This is the <strong>only "
+"time</strong> it will be displayed. Once you leave this page, it cannot "
+"be shown again or recovered by system administrators, as we only store a "
+"secure cryptographic hash of it."
+msgstr ""
+
+#: app/templates/auth/register_success.html:30
+msgid "Proceed to Login"
+msgstr ""
+
+#: app/templates/auth/reset_password.html:3
+msgid "Reset Password - Provr"
+msgstr ""
+
+#: app/templates/auth/reset_password.html:46
+#: app/templates/auth/reset_password_request.html:38
+msgid "Back to"
+msgstr ""
+
+#: app/templates/auth/reset_password_request.html:3
+msgid "Request Reset - Provr"
+msgstr ""
+
+#: app/templates/auth/reset_password_request.html:6
+msgid "Request Password Reset"
+msgstr ""
+
+#: app/templates/auth/update_picture.html:3
+msgid "Update Profile Picture - Provr"
+msgstr ""
+
+#: app/templates/quiz/configure.html:3
+msgid "Configure Quiz - Provr"
+msgstr ""
+
+#: app/templates/quiz/configure.html:6
+#, python-format
+msgid "Configure Quiz — %(name)s"
+msgstr ""
+
+#: app/templates/quiz/configure.html:13
+msgid "Number of questions"
+msgstr ""
+
+#: app/templates/quiz/configure.html:38 app/templates/quiz/result.html:41
+#: app/templates/quiz/upload.html:31
+msgid "Back to My Banks"
+msgstr ""
+
+#: app/templates/quiz/history.html:3
+msgid "History - Provr"
+msgstr ""
+
+#: app/templates/quiz/history.html:6
+msgid "Quiz History"
+msgstr ""
+
+#: app/templates/quiz/history.html:12
+msgid "Deleted Bank"
+msgstr ""
+
+#: app/templates/quiz/history.html:13 app/templates/quiz/result.html:8
+msgid "Score:"
+msgstr ""
+
+#: app/templates/quiz/history.html:16
+#, python-format
+msgid "Time limit: %(min)s min"
+msgstr ""
+
+#: app/templates/quiz/history.html:18
+msgid "No time limit"
+msgstr ""
+
+#: app/templates/quiz/history.html:20
+msgid "View details"
+msgstr ""
+
+#: app/templates/quiz/history.html:25
+msgid "No quiz sessions yet."
+msgstr ""
+
+#: app/templates/quiz/history.html:25
+msgid "Start your first quiz"
+msgstr ""
+
+#: app/templates/quiz/index.html:3
+msgid "Dashboard - Provr"
+msgstr ""
+
+#: app/templates/quiz/index.html:6
+#, python-format
+msgid "Welcome, %(username)s!"
+msgstr ""
+
+#: app/templates/quiz/index.html:7
+msgid "What do you want to do today?"
+msgstr ""
+
+#: app/templates/quiz/index.html:10 app/templates/quiz/list.html:6
+msgid "My Question Banks"
+msgstr ""
+
+#: app/templates/quiz/index.html:12 app/templates/quiz/list.html:8
+msgid "Upload New Bank"
+msgstr ""
+
+#: app/templates/quiz/list.html:3
+msgid "My Question Banks - Provr"
+msgstr ""
+
+#: app/templates/quiz/list.html:15
+#, python-format
+msgid "— %(count)s question"
+msgid_plural "— %(count)s questions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/templates/quiz/list.html:16
+msgid "created"
+msgstr ""
+
+#: app/templates/quiz/list.html:28
+msgid "You have no question banks yet."
+msgstr ""
+
+#: app/templates/quiz/list.html:28
+msgid "Upload one now"
+msgstr ""
+
+#: app/templates/quiz/result.html:3
+msgid "Quiz Result - Provr"
+msgstr ""
+
+#: app/templates/quiz/result.html:6
+msgid "Quiz Result"
+msgstr ""
+
+#: app/templates/quiz/result.html:9
+msgid "Started:"
+msgstr ""
+
+#: app/templates/quiz/result.html:10
+msgid "Finished:"
+msgstr ""
+
+#: app/templates/quiz/result.html:10
+msgid "Not finished"
+msgstr ""
+
+#: app/templates/quiz/result.html:12
+msgid "Review"
+msgstr ""
+
+#: app/templates/quiz/result.html:16
+msgid "Deleted Question"
+msgstr ""
+
+#: app/templates/quiz/result.html:25
+msgid "Your answer:"
+msgstr ""
+
+#: app/templates/quiz/result.html:30
+msgid "Correct:"
+msgstr ""
+
+#: app/templates/quiz/take.html:3
+#, python-format
+msgid "Question %(current)s/%(total)s - Provr"
+msgstr ""
+
+#: app/templates/quiz/take.html:6
+#, python-format
+msgid "Question %(current)s of %(total)s"
+msgstr ""
+
+#: app/templates/quiz/take.html:8
+msgid "Time Remaining:"
+msgstr ""
+
+#: app/templates/quiz/take.html:22
+msgid "Next"
+msgstr ""
+
+#: app/templates/quiz/upload.html:3
+msgid "Upload Question Bank - Provr"
+msgstr ""
+
+#: app/templates/quiz/upload.html:6
+msgid "Upload Question Bank"
+msgstr ""
+
+#: app/templates/quiz/upload.html:13
+msgid "Bank name"
+msgstr ""
+
+#: app/templates/quiz/upload.html:30
+msgid "Need help formatting your file?"
+msgstr ""
+
+#: app/templates/quiz/upload.html:30
+msgid "format guide"
+msgstr ""
+

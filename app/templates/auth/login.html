@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Login - Provr{% endblock %}
+{% block title %}{{ _('Login - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<h2>{{ _('Login') }}</h2>
 
 <form method="POST">
     {{ form.hidden_tag() }}
 
     <div>
         {{ form.email.label }}
-        {{ form.email(placeholder="Email") }}
+        {{ form.email(placeholder=_('Email')) }}
         {% for error in form.email.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -18,7 +18,7 @@
 
     <div>
         {{ form.password.label }}
-        {{ form.password(placeholder="Password") }}
+        {{ form.password(placeholder=_('Password')) }}
         {% for error in form.password.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -27,6 +27,6 @@
     {{ form.submit() }}
 </form>
 
-<p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
-<p>Forgot password? <a href="{{ url_for('auth.reset_password') }}">Reset here</a></p>
+<p>{{ _("Don't have an account?") }} <a href="{{ url_for('auth.register') }}">{{ _('Register') }}</a></p>
+<p>{{ _('Forgot password?') }} <a href="{{ url_for('auth.reset_password_request') }}">{{ _('Reset here') }}</a></p>
 {% endblock %}

@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}My Question Banks - Provr{% endblock %}
+{% block title %}{{ _('My Question Banks - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>My Question Banks</h2>
+<h2>{{ _('My Question Banks') }}</h2>
 
-<a href="{{ url_for('quiz.upload') }}">Upload New Bank</a>
+<a href="{{ url_for('quiz.upload') }}">{{ _('Upload New Bank') }}</a>
 
 {% if banks %}
     <ul class="card-list">
         {% for bank in banks %}
             <li>
                 <strong>{{ bank.name }}</strong>
-                — {{ bank.questions|length }} questions
-                — created {{ bank.created_at.strftime('%Y-%m-%d') }}
+                {% trans count=bank.questions|length %}— {{ count }} question{% pluralize %}— {{ count }} questions{% endtrans %}
+                — {{ _('created') }} {{ bank.created_at.strftime('%Y-%m-%d') }}
 
-                <a href="{{ url_for('quiz.configure', bank_id=bank.id) }}">Start Quiz</a>
+                <a href="{{ url_for('quiz.configure', bank_id=bank.id) }}">{{ _('Start Quiz') }}</a>
 
                 <form method="POST" action="{{ url_for('quiz.delete_bank', bank_id=bank.id) }}">
                     {{ form.hidden_tag() }}
-                    <button type="submit">Delete</button>
+                    <button type="submit">{{ _('Delete') }}</button>
                 </form>
             </li>
         {% endfor %}
     </ul>
 {% else %}
-    <p>You have no question banks yet. <a href="{{ url_for('quiz.upload') }}">Upload one now</a>.</p>
+    <p>{{ _('You have no question banks yet.') }} <a href="{{ url_for('quiz.upload') }}">{{ _('Upload one now') }}</a>.</p>
 {% endif %}
 
-<a href="{{ url_for('quiz.index') }}">Back to Dashboard</a>
+<a href="{{ url_for('quiz.index') }}">{{ _('Back to Dashboard') }}</a>
 {% endblock %}

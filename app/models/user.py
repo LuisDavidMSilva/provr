@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
     is_admin: Mapped[bool] = mapped_column(default=False)
 
     recovery_key_hash: Mapped[Optional[str]] = mapped_column(String(256))
+    locale: Mapped[Optional[str]] = mapped_column(String(10), default='en')
 
     banks: Mapped[list["QuestionBank"]] = relationship(back_populates="owner")
     sessions: Mapped[list["QuizSession"]] = relationship(back_populates="user")

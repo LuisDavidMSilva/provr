@@ -10,6 +10,8 @@ class Config:
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
+    LANGUAGES = ['en', 'pt_BR', 'es']
+    BABEL_DEFAULT_LOCALE = 'en'
 
 class DevelopmentConfig(Config):
     DEBUG = True
