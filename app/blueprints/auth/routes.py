@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, session, request, make_response
-from app import db, bcrypt
+from app import db, bcrypt, limiter
 from app.models.user import User
 from app.models.moderation import ContentFilterConfig, ModerationLog
 from app.blueprints.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateProfilePictureForm, SetNewPassword, RecoveryPassword, GenerateRecoveryKeyForm, ResetPasswordRequestForm
@@ -11,6 +11,7 @@ import secrets
 from PIL import Image
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
+@limiter.limit("3 per hour")
 def register():
     if current_user.is_authenticated:
         flash(_('You are already logged in.'), 'info')
@@ -46,6 +47,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def login():
     if current_user.is_authenticated:
         flash(_('You are already logged in.'), 'info')
@@ -83,6 +85,7 @@ def change_password():
     return render_template('auth/change_password.html', form=form)
 
 @auth_bp.route('/reset-password-request', methods=['GET', 'POST'])
+@limiter.limit("5 per hour")
 def reset_password_request():
     form = ResetPasswordRequestForm()
     if form.validate_on_submit():
@@ -170,6 +173,7 @@ def update_picture():
 
 
 @auth_bp.route('/reset-password', methods=['GET', 'POST'])
+@limiter.limit("5 per hour")
 def reset_password():
     if current_user.is_authenticated:
         return redirect(url_for('quiz.index'))
