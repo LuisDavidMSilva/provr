@@ -107,24 +107,24 @@ provr/
 ## Rate Limiting & Health Check
 
 ### 🔒 Rate Limiting
-A aplicação utiliza o **Flask-Limiter** para controlar e limitar abusos e ataques de força bruta. 
+The application uses **Flask-Limiter** to control and throttle abuse and brute-force attacks.
 
-* **Limites Padrão:**
-  * Global (padrão): `200 por dia` e `50 por hora`.
-  * Rota `/auth/register`: `3 por hora` (proteção contra spam).
-  * Rota `/auth/login`: `5 por minuto` (proteção contra brute-force).
-  * Rotas `/auth/reset-password*`: `5 por hora`.
-  * Rota `/quiz/upload`: `10 por minuto`.
-  * Rota `/quiz/take`: `60 por minuto`.
-  * Rotas Administrativas (`/admin/*`): `30 por minuto`.
+* **Default Limits:**
+  * Global (default): `200 per day` and `50 per hour`.
+  * `/auth/register` route: `3 per hour` (spam protection).
+  * `/auth/login` route: `5 per minute` (brute-force protection).
+  * `/auth/reset-password*` routes: `5 per hour`.
+  * `/quiz/upload` route: `10 per minute`.
+  * `/quiz/take` route: `60 per minute`.
+  * Administrative routes (`/admin/*`): `60 per minute`.
 
-* **Storage (Persistência):**
-  * Em **desenvolvimento**, utiliza armazenamento em memória local (`memory://`).
-  * Em **produção**, lê dinamicamente da variável de ambiente `REDIS_URL` para compartilhar os contadores entre múltiplos workers do Gunicorn.
+* **Storage (Persistence):**
+  * In **development**, it uses local in-memory storage (`memory://`).
+  * In **production**, it dynamically reads from the `REDIS_URL` environment variable to share counters across multiple Gunicorn workers.
 
-* **Resposta de Erro:**
-  * Requisições normais de navegadores (HTML) que excedem o limite são redirecionadas com uma mensagem de erro `flash`.
-  * Requisições de API (JSON) recebem o status HTTP `429 Too Many Requests` com uma resposta estruturada:
+* **Error Response:**
+  * Standard browser requests (HTML) exceeding the limit are redirected with a `flash` error message.
+  * API requests (JSON) receive an HTTP `429 Too Many Requests` status with a structured response:
     ```json
     {
       "error": "Too many requests",
@@ -132,27 +132,27 @@ A aplicação utiliza o **Flask-Limiter** para controlar e limitar abusos e ataq
     }
     ```
 
-* **Headers HTTP Retornados:**
-  * `X-RateLimit-Limit`: Quantidade limite de requisições.
-  * `X-RateLimit-Remaining`: Requisições restantes na janela.
-  * `X-RateLimit-Reset`: Timestamp UNIX quando a janela reinicia.
+* **Returned HTTP Headers:**
+  * `X-RateLimit-Limit`: Maximum number of requests.
+  * `X-RateLimit-Remaining`: Remaining requests in the current window.
+  * `X-RateLimit-Reset`: UNIX timestamp when the window resets.
 
 ---
 
-### 🏥 Health Check & Monitoramento
-O blueprint de monitoramento está disponível sob o prefixo `/health/` e todas as suas rotas são isentas de rate limits (`@limiter.exempt`).
+### 🏥 Health Check & Monitoring
+The monitoring blueprint is available under the `/health/` prefix, and all of its routes are exempt from rate limits (`@limiter.exempt`).
 
 * **Endpoints:**
-  * `GET /health/`: Diagnóstico completo. Verifica a conectividade do banco de dados (SQLAlchemy) e retorna metadados como versão, tempo de atividade (`uptime`) e ambiente.
-  * `GET /health/live`: Liveness probe público (retorna `{ "alive": true }`).
-  * `GET /health/ready`: Readiness probe público (retorna `{ "ready": true }`).
+  * `GET /health/`: Full diagnostics. Checks database connectivity (SQLAlchemy) and returns metadata such as version, uptime, and environment.
+  * `GET /health/live`: Public liveness probe (returns `{ "alive": true }`).
+  * `GET /health/ready`: Public readiness probe (returns `{ "ready": true }`).
 
-* **🔒 Autenticação do Health Check (Opcional):**
-  * Para proteger o endpoint detalhado `/health/` em produção, configure a variável de ambiente `HEALTH_CHECK_TOKEN`.
-  * Se configurada, o cliente deve enviar o cabeçalho `X-Health-Token` ou o parâmetro `?token=` com o valor correto para receber os dados de diagnóstico; caso contrário, receberá `401 Unauthorized`.
+* **🔒 Health Check Authentication (Optional):**
+  * To protect the detailed diagnostic endpoint `/health/` in production, configure the `HEALTH_CHECK_TOKEN` environment variable.
+  * If configured, the client must send the `X-Health-Token` header or `?token=` query parameter with the correct value to receive diagnostic data; otherwise, it returns `401 Unauthorized`.
 
-* **🚨 Configurando o UptimeRobot (VPS):**
-  1. Acesse o painel do [UptimeRobot](https://uptimerobot.com/).
-  2. Crie um novo monitor do tipo `HTTP(s)`.
-  3. Insira a URL completa do endpoint: `https://seusite.com/health/` (ou envie o token de cabeçalho `X-Health-Token` caso esteja ativado).
-  4. Defina o intervalo de verificação (ex: 5 minutos) e configure os alertas de e-mail/Telegram para o status HTTP != `200`.
+* **🚨 Setting up UptimeRobot (VPS):**
+  1. Access the [UptimeRobot](https://uptimerobot.com/) dashboard.
+  2. Create a new monitor of type `HTTP(s)`.
+  3. Enter the full URL of the endpoint: `https://yourdomain.com/health/` (or send the `X-Health-Token` header if enabled).
+  4. Set the check interval (e.g. 5 minutes) and configure email/Telegram alerts for HTTP status != `200`.
