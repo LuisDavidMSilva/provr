@@ -4,7 +4,7 @@ import os
 from datetime import datetime, timezone
 from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import login_required, current_user
-from app import db
+from app import db, limiter
 from app.models.question import QuestionBank, Question
 from app.models.quiz import QuizSession, QuizAnswer
 from app.models.moderation import ContentFilterConfig, ModerationLog
@@ -21,6 +21,7 @@ def index():
 
 @quiz_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("10 per minute")
 def upload():
     form = UploadBankForm()
     if form.validate_on_submit():
@@ -213,6 +214,7 @@ def configure(bank_id):
 
 @quiz_bp.route('/take', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("60 per minute")
 def take():
     quiz_session_id = session.get('quiz_session_id')
     time_limit = session.get('time_limit')

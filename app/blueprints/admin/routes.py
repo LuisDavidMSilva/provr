@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from collections import defaultdict
 from flask import render_template, redirect, url_for, flash, request, abort, jsonify
 from flask_login import login_required, current_user
-from app import db
+from app import db, limiter
 from app.models.user import User
 from app.models.question import QuestionBank, Question
 from app.models.quiz import QuizSession, QuizAnswer
@@ -23,6 +23,7 @@ def admin_required(f):
 @admin_bp.route('/dashboard')
 @login_required
 @admin_required
+@limiter.limit("60 per minute")
 def dashboard():
     total_users = db.session.query(User).count()
     total_banks = db.session.query(QuestionBank).count()
@@ -50,6 +51,7 @@ def dashboard():
 @admin_bp.route('/analytics')
 @login_required
 @admin_required
+@limiter.limit("60 per minute")
 def analytics():
     # NOTE: Scale limitation - this loads all users and sessions in-memory.
     # For MVP this is acceptable, but in production, this should use SQL aggregations.
@@ -117,6 +119,7 @@ def analytics():
 @admin_bp.route('/performance')
 @login_required
 @admin_required
+@limiter.limit("60 per minute")
 def performance():
     users = db.session.scalars(db.select(User)).all()
     user_stats = []
@@ -156,6 +159,7 @@ def performance():
 @admin_bp.route('/moderation', methods=['GET', 'POST'])
 @login_required
 @admin_required
+@limiter.limit("60 per minute")
 def moderation():
     configs = db.session.scalars(db.select(ContentFilterConfig)).all()
     config_dict = {c.name: c for c in configs}
@@ -198,6 +202,7 @@ def moderation():
 @admin_bp.route('/users/<int:user_id>/toggle-admin', methods=['POST'])
 @login_required
 @admin_required
+@limiter.limit("60 per minute")
 def toggle_admin(user_id):
     user = db.get_or_404(User, user_id)
     if user.id == current_user.id:
