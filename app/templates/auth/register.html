@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Register - Provr{% endblock %}
+{% block title %}{{ _('Register - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>Create Account</h2>
+<h2>{{ _('Create Account') }}</h2>
 
 <form method="POST">
     {{ form.hidden_tag() }}
 
     <div>
         {{ form.username.label }}
-        {{ form.username(placeholder="Username") }}
+        {{ form.username(placeholder=_('Username')) }}
         {% for error in form.username.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -18,7 +18,7 @@
 
     <div>
         {{ form.email.label }}
-        {{ form.email(placeholder="Email") }}
+        {{ form.email(placeholder=_('Email')) }}
         {% for error in form.email.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -26,7 +26,7 @@
 
     <div>
         {{ form.password.label }}
-        {{ form.password(placeholder="Password") }}
+        {{ form.password(placeholder=_('Password')) }}
         {% for error in form.password.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -34,7 +34,7 @@
 
     <div>
         {{ form.confirm_password.label }}
-        {{ form.confirm_password(placeholder="Confirm Password") }}
+        {{ form.confirm_password(placeholder=_('Confirm Password')) }}
         {% for error in form.confirm_password.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -43,7 +43,7 @@
     <div>
         {{ form.terms() }} 
         {{ form.terms.label }} 
-        — <a href="{{ url_for('terms') }}" target="_blank">Read Terms of Use</a>
+        — <a href="{{ url_for('terms') }}" target="_blank">{{ _('Read Terms of Use') }}</a>
         {% for error in form.terms.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -52,5 +52,5 @@
     {{ form.submit() }}
 </form>
 
-<p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+<p>{{ _('Already have an account?') }} <a href="{{ url_for('auth.login') }}">{{ _('Login') }}</a></p>
 {% endblock %}

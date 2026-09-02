@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Configure Quiz - Provr{% endblock %}
+{% block title %}{{ _('Configure Quiz - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>Configure Quiz — {{ bank.name }}</h2>
+<h2>{{ _('Configure Quiz — %(name)s', name=bank.name) }}</h2>
 
 <form method="POST">
     {{ form.hidden_tag() }}
 
     <div>
         {{ form.quantity.label }}
-        {{ form.quantity(placeholder="Number of questions") }}
+        {{ form.quantity(placeholder=_('Number of questions')) }}
         {% for error in form.quantity.errors %}
             <span>{{ error }}</span>
         {% endfor %}
@@ -35,5 +35,5 @@
     {{ form.submit() }}
 </form>
 
-<a href="{{ url_for('quiz.list_banks') }}">Back to My Banks</a>
+<a href="{{ url_for('quiz.list_banks') }}">{{ _('Back to My Banks') }}</a>
 {% endblock %}

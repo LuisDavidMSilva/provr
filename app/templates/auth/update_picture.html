@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Update Profile Picture - Provr{% endblock %}
+{% block title %}{{ _('Update Profile Picture - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>Update Profile Picture</h2>
+<h2>{{ _('Update Profile Picture') }}</h2>
 
 <form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
@@ -19,5 +19,5 @@
     {{ form.submit() }}
 </form>
 
-<a href="{{ url_for('quiz.index') }}">Back to Dashboard</a>
+<a href="{{ url_for('quiz.index') }}">{{ _('Back to Dashboard') }}</a>
 {% endblock %}

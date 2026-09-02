@@ -1,24 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Terms of Use - Provr{% endblock %}
+{% block title %}{{ _('Terms of Use - Provr') }}{% endblock %}
 
 {% block content %}
-<h1>Terms of Use</h1>
+<h1>{{ _('Terms of Use') }}</h1>
 <div style="max-width: 600px; margin: 0 auto;">
-    <p>Welcome to Provr! These terms of use govern your use of our website and services.</p>
-    <p>By using Provr, you agree to the following terms:</p>
+    <p>{{ _('Welcome to Provr! These terms of use govern your use of our website and services.') }}</p>
+    <p>{{ _('By using Provr, you agree to the following terms:') }}</p>
     <ul style="line-height: 2;">
-        <li>Non-commercial portfolio project</li>
-        <li>Data may be deleted without prior notice</li>
-        <li>Do not use real data (primary personal email, reused password)</li>
-        <li>Profile photos are stored on the project server</li>
-        <li>No guarantee of availability or continuity</li>
-        <li>We are not responsible for data loss</li>
+        <li>{{ _('Non-commercial portfolio project') }}</li>
+        <li>{{ _('Data may be deleted without prior notice') }}</li>
+        <li>{{ _('Do not use real data (primary personal email, reused password)') }}</li>
+        <li>{{ _('Profile photos are stored on the project server') }}</li>
+        <li>{{ _('No guarantee of availability or continuity') }}</li>
+        <li>{{ _('We are not responsible for data loss') }}</li>
     </ul>
 
-    <p style="margin-top: 2rem;">If you have any questions or wish to delete your data/confirm its removal from the
-        database, please contact us
-        at the following email address: <a href="mailto:luisdms@protonmail.com">luisdms@protonmail.com</a>
+    <p style="margin-top: 2rem;">
+        {% trans email="luisdms@protonmail.com" %}If you have any questions or wish to delete your data/confirm its removal from the database, please contact us at the following email address: <a href="mailto:{{ email }}">{{ email }}</a>{% endtrans %}
     </p>
 </div>
 {% endblock %}

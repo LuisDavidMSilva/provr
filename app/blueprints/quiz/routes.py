@@ -4,11 +4,12 @@ import os
 from datetime import datetime, timezone
 from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import login_required, current_user
-from app import db
+from app import db, limiter
 from app.models.question import QuestionBank, Question
 from app.models.quiz import QuizSession, QuizAnswer
 from app.models.moderation import ContentFilterConfig, ModerationLog
 from app.blueprints.quiz.forms import UploadBankForm, DeleteBankForm, QuizConfigForm, AnswerForm
+from flask_babel import gettext as _
 from . import quiz_bp
 
 
@@ -20,6 +21,7 @@ def index():
 
 @quiz_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("10 per minute")
 def upload():
     form = UploadBankForm()
     if form.validate_on_submit():
@@ -37,7 +39,7 @@ def upload():
             except ValueError:
                 max_size_mb = 3.0
             if size > max_size_mb * 1024 * 1024:
-                reason = f"Upload blocked: file size ({size / (1024*1024):.2f}MB) exceeds limit of {max_size_mb}MB."
+                reason = _("Upload blocked: file size (%(size).2fMB) exceeds limit of %(limit)sMB.") % {'size': size / (1024*1024), 'limit': max_size_mb}
                 log = ModerationLog(
                     user_id=current_user.id,
                     username=current_user.username,
@@ -57,7 +59,7 @@ def upload():
             ext = file.filename.split('.')[-1].lower() if '.' in file.filename else ''
             blocked_exts = [e.strip().lower() for e in ext_cfg.value.split(',') if e.strip()]
             if ext in blocked_exts:
-                reason = f"Upload blocked: file extension '.{ext}' is prohibited."
+                reason = _("Upload blocked: file extension '.%(ext)s' is prohibited.") % {'ext': ext}
                 log = ModerationLog(
                     user_id=current_user.id,
                     username=current_user.username,
@@ -81,7 +83,7 @@ def upload():
                 content_lower = content.lower()
                 matched_words = [w for w in blocked_words if w in content_lower]
                 if matched_words:
-                    reason = f"Upload blocked: file contains forbidden keywords ({', '.join(matched_words)})."
+                    reason = _("Upload blocked: file contains forbidden keywords (%(keywords)s).") % {'keywords': ', '.join(matched_words)}
                     log = ModerationLog(
                         user_id=current_user.id,
                         username=current_user.username,
@@ -98,7 +100,7 @@ def upload():
             questions_data = json.loads(content)
 
             if not isinstance(questions_data, list):
-                flash('Invalid format: file must contain a JSON array.', 'danger')
+                flash(_('Invalid format: file must contain a JSON array.'), 'danger')
                 return redirect(url_for('quiz.upload'))
 
             bank = QuestionBank(
@@ -111,7 +113,7 @@ def upload():
             for item in questions_data:
                 if not all(k in item for k in ('text', 'level', 'alternatives', 'correct_answer')):
                     db.session.rollback()
-                    flash('One or more questions have missing fields.', 'danger')
+                    flash(_('One or more questions have missing fields.'), 'danger')
                     return redirect(url_for('quiz.upload'))
 
                 question = Question(
@@ -125,11 +127,11 @@ def upload():
                 db.session.add(question)
 
             db.session.commit()
-            flash(f'Question bank "{bank.name}" uploaded successfully!', 'success')
+            flash(_('Question bank "%(name)s" uploaded successfully!') % {'name': bank.name}, 'success')
             return redirect(url_for('quiz.list_banks'))
 
         except json.JSONDecodeError:
-            flash('Invalid JSON file. Please check the file format.', 'danger')
+            flash(_('Invalid JSON file. Please check the file format.'), 'danger')
             return redirect(url_for('quiz.upload'))
 
     return render_template('quiz/upload.html', form=form)
@@ -148,11 +150,11 @@ def list_banks():
 def delete_bank(bank_id):
     bank = db.get_or_404(QuestionBank, bank_id)
     if bank.owner_id != current_user.id:
-        flash('You are not allowed to delete this bank.', 'danger')
+        flash(_('You are not allowed to delete this bank.'), 'danger')
         return redirect(url_for('quiz.list_banks'))
     db.session.delete(bank)
     db.session.commit()
-    flash(f'Question bank "{bank.name}" deleted successfully.', 'success')
+    flash(_('Question bank "%(name)s" deleted successfully.') % {'name': bank.name}, 'success')
     return redirect(url_for('quiz.list_banks'))
 
 LEVEL_ALIASES = {
@@ -166,7 +168,7 @@ LEVEL_ALIASES = {
 def configure(bank_id):
     bank = db.get_or_404(QuestionBank, bank_id)
     if bank.owner_id != current_user.id:
-        flash('Access denied.', 'danger')
+        flash(_('Access denied.'), 'danger')
         return redirect(url_for('quiz.list_banks'))
 
     form = QuizConfigForm()
@@ -183,7 +185,7 @@ def configure(bank_id):
         questions = list(db.session.scalars(query).all())
 
         if len(questions) < quantity:
-            flash(f'Not enough questions. This bank has {len(questions)} questions for the selected level.', 'danger')
+            flash(_('Not enough questions. This bank has %(count)s questions for the selected level.') % {'count': len(questions)}, 'danger')
             return redirect(url_for('quiz.configure', bank_id=bank.id))
 
         selected = random.sample(questions, quantity)
@@ -212,18 +214,19 @@ def configure(bank_id):
 
 @quiz_bp.route('/take', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("60 per minute")
 def take():
     quiz_session_id = session.get('quiz_session_id')
     time_limit = session.get('time_limit')
     started_at_ts = session.get('started_at_ts') 
 
     if not quiz_session_id or not started_at_ts:
-        flash('No active quiz session.', 'danger')
+        flash(_('No active quiz session.'), 'danger')
         return redirect(url_for('quiz.list_banks'))
 
     quiz_session = db.session.get(QuizSession, quiz_session_id)
     if not quiz_session:
-        flash('Quiz session not found.', 'danger')
+        flash(_('Quiz session not found.'), 'danger')
         return redirect(url_for('quiz.list_banks'))
 
     question_ids = quiz_session.question_ids
@@ -246,7 +249,7 @@ def take():
             elapsed = now_ts - started_at_ts
             
             if elapsed > (time_limit + 5):
-                flash('Time is up! Your quiz was automatically submitted.', 'warning')
+                flash(_('Time is up! Your quiz was automatically submitted.'), 'warning')
                 if quiz_session.finished_at is None:
                     answers = db.session.scalars(db.select(QuizAnswer).filter_by(session_id=quiz_session_id)).all()
                     quiz_session.score = sum(1 for a in answers if a.is_correct)
@@ -256,7 +259,7 @@ def take():
 
         selected = request.form.get('answer')
         if not selected:
-            flash('Please select an answer.', 'danger')
+            flash(_('Please select an answer.'), 'danger')
             return redirect(url_for('quiz.take'))
 
         is_correct = selected == question.correct_answer
@@ -317,7 +320,7 @@ def history():
 def session_detail(session_id):
     quiz_session = db.get_or_404(QuizSession, session_id)
     if quiz_session.user_id != current_user.id:
-        flash('Access denied.', 'danger')
+        flash(_('Access denied.'), 'danger')
         return redirect(url_for('quiz.history'))
 
     answers = db.session.scalars(db.select(QuizAnswer).filter_by(session_id=session_id)).all()

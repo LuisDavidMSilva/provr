@@ -1,33 +1,34 @@
 from flask import render_template, redirect, url_for, flash, session, request, make_response
-from app import db, bcrypt
+from app import db, bcrypt, limiter
 from app.models.user import User
 from app.models.moderation import ContentFilterConfig, ModerationLog
 from app.blueprints.auth.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateProfilePictureForm, SetNewPassword, RecoveryPassword, GenerateRecoveryKeyForm, ResetPasswordRequestForm
 from flask_login import login_user, logout_user, login_required, current_user
+from flask_babel import gettext as _
 from . import auth_bp
 import os
 import secrets
 from PIL import Image
 
-
 @auth_bp.route('/register', methods=['GET', 'POST'])
+@limiter.limit("3 per hour")
 def register():
     if current_user.is_authenticated:
-        flash('You are already logged in.', 'info')
+        flash(_('You are already logged in.'), 'info')
         return redirect(url_for('quiz.index'))  
     form = RegistrationForm()
     if form.validate_on_submit():
         if db.session.scalar(db.select(User).filter_by(email=form.email.data)):
-            flash('Email already registered. Please log in.', 'danger')
+            flash(_('Email already registered. Please log in.'), 'danger')
             return redirect(url_for('auth.login'))
             
         if db.session.scalar(db.select(User).filter_by(username=form.username.data)):
-            flash('Username already taken. Please choose another.', 'danger')
+            flash(_('Username already taken. Please choose another.'), 'danger')
             return redirect(url_for('auth.register'))
         
         recovery_key = '-'.join([secrets.token_hex(4).upper() for _ in range(3)])
         hashed_recovery_key = bcrypt.generate_password_hash(recovery_key).decode('utf-8')
-
+ 
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(
             username=form.username.data,
@@ -46,18 +47,19 @@ def register():
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def login():
     if current_user.is_authenticated:
-        flash('You are already logged in.', 'info')
+        flash(_('You are already logged in.'), 'info')
         return redirect(url_for('quiz.index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
         if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
             login_user(user)
-            flash('Logged in successfully!', 'success')
+            flash(_('Logged in successfully!'), 'success')
             return redirect(url_for('quiz.index'))
-        flash('Invalid email or password.', 'danger')
+        flash(_('Invalid email or password.'), 'danger')
     return render_template('auth/login.html', form=form)
 
 
@@ -77,12 +79,13 @@ def change_password():
             hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
             current_user.password_hash = hashed_password
             db.session.commit()
-            flash('Password updated successfully!', 'success')
+            flash(_('Password updated successfully!'), 'success')
             return redirect(url_for('quiz.index'))
-        flash('Current password is incorrect.', 'danger')
+        flash(_('Current password is incorrect.'), 'danger')
     return render_template('auth/change_password.html', form=form)
 
 @auth_bp.route('/reset-password-request', methods=['GET', 'POST'])
+@limiter.limit("5 per hour")
 def reset_password_request():
     form = ResetPasswordRequestForm()
     if form.validate_on_submit():
@@ -92,12 +95,10 @@ def reset_password_request():
             if user.recovery_key_hash and bcrypt.check_password_hash(user.recovery_key_hash, clean_key):
                 session['reset_email'] = user.email
                 session['reset_recovery_key'] = clean_key
-                flash('Identity verified with recovery key. Please set your new password.', 'info')
+                flash(_('Identity verified with recovery key. Please set your new password.'), 'info')
                 return redirect(url_for('auth.reset_password'))
-        flash('Invalid email, username, or recovery key.', 'danger')
+        flash(_('Invalid email, username, or recovery key.'), 'danger')
     return render_template('auth/reset_password_request.html', form=form)
-
-
 
 
 @auth_bp.route('/update-picture', methods=['GET', 'POST'])
@@ -119,7 +120,7 @@ def update_picture():
             except ValueError:
                 max_size_mb = 3.0
             if size > max_size_mb * 1024 * 1024:
-                reason = f"Upload blocked: profile picture size ({size / (1024*1024):.2f}MB) exceeds limit of {max_size_mb}MB."
+                reason = _("Upload blocked: profile picture size (%(size).2fMB) exceeds limit of %(limit)sMB.") % {'size': size / (1024*1024), 'limit': max_size_mb}
                 log = ModerationLog(
                     user_id=current_user.id,
                     username=current_user.username,
@@ -139,7 +140,7 @@ def update_picture():
             ext = file.filename.split('.')[-1].lower() if '.' in file.filename else ''
             blocked_exts = [e.strip().lower() for e in ext_cfg.value.split(',') if e.strip()]
             if ext in blocked_exts:
-                reason = f"Upload blocked: file extension '.{ext}' is prohibited."
+                reason = _("Upload blocked: file extension '.%(ext)s' is prohibited.") % {'ext': ext}
                 log = ModerationLog(
                     user_id=current_user.id,
                     username=current_user.username,
@@ -166,12 +167,13 @@ def update_picture():
 
         current_user.profile_picture = f"uploads/{filename}"
         db.session.commit()
-        flash('Profile picture updated successfully!', 'success')
+        flash(_('Profile picture updated successfully!'), 'success')
         return redirect(url_for('quiz.index'))
     return render_template('auth/update_picture.html', form=form)
 
 
 @auth_bp.route('/reset-password', methods=['GET', 'POST'])
+@limiter.limit("5 per hour")
 def reset_password():
     if current_user.is_authenticated:
         return redirect(url_for('quiz.index'))
@@ -187,7 +189,7 @@ def reset_password():
         user = db.session.scalar(db.select(User).filter_by(email=form.email.data))
         if user:
             if not user.recovery_key_hash:
-                flash('This account does not have a recovery key configured.', 'danger')
+                flash(_('This account does not have a recovery key configured.'), 'danger')
                 return redirect(url_for('auth.reset_password'))
 
             clean_key = form.recovery_key.data.strip().upper()
@@ -197,10 +199,10 @@ def reset_password():
                 db.session.commit()
                 session.pop('reset_email', None)
                 session.pop('reset_recovery_key', None)
-                flash('Password reset successfully! You can now log in.', 'success')
+                flash(_('Password reset successfully! You can now log in.'), 'success')
                 return redirect(url_for('auth.login'))
         
-        flash('Invalid email or recovery key.', 'danger')
+        flash(_('Invalid email or recovery key.'), 'danger')
     return render_template('auth/reset_password.html', form=form)
 
 
@@ -215,7 +217,19 @@ def recovery_key():
             hashed_recovery_key = bcrypt.generate_password_hash(new_key).decode('utf-8')
             current_user.recovery_key_hash = hashed_recovery_key
             db.session.commit()
-            flash('New recovery key generated successfully!', 'success')
+            flash(_('New recovery key generated successfully!'), 'success')
         else:
-            flash('Incorrect password.', 'danger')
+            flash(_('Incorrect password.'), 'danger')
     return render_template('auth/recovery_key.html', form=form, new_key=new_key)
+
+
+@auth_bp.route('/set-language/<lang_code>')
+def set_language(lang_code):
+    from flask import session, request
+    if lang_code in ['en', 'pt_BR', 'es']:
+        session['lang'] = lang_code
+        if current_user.is_authenticated:
+            current_user.locale = lang_code
+            db.session.commit()
+        flash(_('Language updated successfully!'), 'success')
+    return redirect(request.referrer or url_for('quiz.index'))

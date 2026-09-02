@@ -1,39 +1,39 @@
 {% extends 'base.html' %}
 
-{% block title %}Content Security & Filtering — Provr{% endblock %}
+{% block title %}{{ _('Content Security & Filtering — Provr') }}{% endblock %}
 
 {% block content %}
 <div class="admin-container">
     <div class="admin-header">
-        <h1>Admin Control Panel</h1>
-        <p class="subtitle">System overview, metrics, and security audits</p>
+        <h1>{{ _('Admin Control Panel') }}</h1>
+        <p class="subtitle">{{ _('System overview, metrics, and security audits') }}</p>
     </div>
 
     <!-- Admin Sub-navigation -->
     <div class="admin-tabs">
-        <a href="{{ url_for('admin.dashboard') }}" class="tab-btn">Overview</a>
-        <a href="{{ url_for('admin.analytics') }}" class="tab-btn">Usage Analytics</a>
-        <a href="{{ url_for('admin.performance') }}" class="tab-btn">User Performance</a>
-        <a href="{{ url_for('admin.moderation') }}" class="tab-btn active">Content Security</a>
+        <a href="{{ url_for('admin.dashboard') }}" class="tab-btn">{{ _('Overview') }}</a>
+        <a href="{{ url_for('admin.analytics') }}" class="tab-btn">{{ _('Usage Analytics') }}</a>
+        <a href="{{ url_for('admin.performance') }}" class="tab-btn">{{ _('User Performance') }}</a>
+        <a href="{{ url_for('admin.moderation') }}" class="tab-btn active">{{ _('Content Security') }}</a>
     </div>
 
     <!-- Security settings and configuration -->
     <div class="dashboard-tables-grid" style="grid-template-columns: 1fr; margin-bottom: 2rem;">
         <div class="section-card">
-            <h2>Content Security & Filtering Configurations</h2>
-            <p class="text-muted" style="margin-bottom: 1.5rem;">Configure filters to control files and metadata stored on your server and VPS instance. Define size restrictions, block harmful scripts, and prohibit executable extensions.</p>
+            <h2>{{ _('Content Security & Filtering Configurations') }}</h2>
+            <p class="text-muted" style="margin-bottom: 1.5rem;">{{ _('Configure filters to control files and metadata stored on your server and VPS instance. Define size restrictions, block harmful scripts, and prohibit executable extensions.') }}</p>
             
             <form action="{{ url_for('admin.moderation') }}" method="POST" class="moderation-form">
                 {% for config in configs %}
                 <div class="security-config-group">
                     <div class="config-toggle-header">
-                        <span class="config-name-lbl">{{ config.name.replace('_', ' ').title() }}</span>
+                        <span class="config-name-lbl">{{ _(config.name.replace('_', ' ').title()) }}</span>
                         <label class="switch-toggle">
                             <input type="checkbox" name="{{ config.name }}_active" {% if config.is_active %}checked{% endif %}>
                             <span class="switch-slider"></span>
                         </label>
                     </div>
-                    <p class="config-description">{{ config.description }}</p>
+                    <p class="config-description">{{ _(config.description) }}</p>
                     
                     {% if config.name == 'max_file_size' %}
                     <div class="config-input-wrapper">
@@ -48,7 +48,7 @@
                 {% endfor %}
                 
                 <div style="margin-top: 1rem;">
-                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                    <button type="submit" class="btn btn-primary">{{ _('Save Settings') }}</button>
                 </div>
             </form>
         </div>
@@ -56,19 +56,19 @@
 
     <!-- Moderation/Security Log table -->
     <div class="section-card">
-        <h2>Security Audit Logs (Blocked Upload Attempts)</h2>
-        <p class="text-muted" style="margin-bottom: 1rem;">Real-time logging of upload violations intercepted by the content filtering engine.</p>
+        <h2>{{ _('Security Audit Logs (Blocked Upload Attempts)') }}</h2>
+        <p class="text-muted" style="margin-bottom: 1rem;">{{ _('Real-time logging of upload violations intercepted by the content filtering engine.') }}</p>
         
         <div class="table-wrapper">
             <table class="admin-table">
                 <thead>
                     <tr>
-                        <th>Timestamp</th>
-                        <th>User</th>
-                        <th>File Name</th>
-                        <th>Content Type</th>
-                        <th>Reason for Block</th>
-                        <th>Action Taken</th>
+                        <th>{{ _('Timestamp') }}</th>
+                        <th>{{ _('User') }}</th>
+                        <th>{{ _('File Name') }}</th>
+                        <th>{{ _('Content Type') }}</th>
+                        <th>{{ _('Reason for Block') }}</th>
+                        <th>{{ _('Action Taken') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,11 +77,11 @@
                         <td class="date-tag">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
                         <td>
                             <div style="font-weight: 600;">{{ log.username }}</div>
-                            <div class="text-muted text-xs">ID: {{ log.user_id or 'Deleted' }}</div>
+                            <div class="text-muted text-xs">ID: {{ log.user_id or _('Deleted') }}</div>
                         </td>
                         <td style="font-family: monospace; font-size: 0.9rem;">{{ log.filename }}</td>
                         <td>
-                            <span class="badge file-badge">{{ log.content_type.replace('_', ' ').title() }}</span>
+                            <span class="badge file-badge">{{ _(log.content_type.replace('_', ' ').title()) }}</span>
                         </td>
                         <td class="log-reason-cell" style="color: var(--danger); font-size: 0.9rem;">
                             {{ log.reason }}
@@ -92,7 +92,7 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" class="empty-state">🎉 Excellent! No upload security events logged.</td>
+                        <td colspan="6" class="empty-state">{{ _('🎉 Excellent! No upload security events logged.') }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

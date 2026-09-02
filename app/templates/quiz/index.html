@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Provr{% endblock %}
+{% block title %}{{ _('Dashboard - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{ current_user.username }}!</h2>
-<p style="color: var(--text-muted); margin-bottom: 2rem;">What do you want to do today?</p>
+<h2>{{ _('Welcome, %(username)s!', username=current_user.username) }}</h2>
+<p style="color: var(--text-muted); margin-bottom: 2rem;">{{ _('What do you want to do today?') }}</p>
 
 <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
-    <a href="{{ url_for('quiz.list_banks') }}" class="btn-primary">My Question Banks</a>
-    <a href="{{ url_for('quiz.history') }}" class="btn-primary">My Results</a>
-    <a href="{{ url_for('quiz.upload') }}" class="btn-primary">Upload New Bank</a>
+    <a href="{{ url_for('quiz.list_banks') }}" class="btn-primary">{{ _('My Question Banks') }}</a>
+    <a href="{{ url_for('quiz.history') }}" class="btn-primary">{{ _('My Results') }}</a>
+    <a href="{{ url_for('quiz.upload') }}" class="btn-primary">{{ _('Upload New Bank') }}</a>
 </div>
 {% endblock %}

@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}History - Provr{% endblock %}
+{% block title %}{{ _('History - Provr') }}{% endblock %}
 
 {% block content %}
-<h2>Quiz History</h2>
+<h2>{{ _('Quiz History') }}</h2>
 
 {% if sessions %}
     <ul class="card-list">
         {% for s in sessions %}
             <li>
-                <strong>{{ s.bank.name if s.bank else 'Deleted Bank' }}</strong>
-                — Score: {{ s.score }}/{{ s.total }}
+                <strong>{{ s.bank.name if s.bank else _('Deleted Bank') }}</strong>
+                — {{ _('Score:') }} {{ s.score }}/{{ s.total }}
                 — {{ s.started_at.strftime('%Y-%m-%d %H:%M') }}
                 {% if s.time_limit > 0 %}
-                    — Time limit: {{ (s.time_limit // 60) }} min
+                    — {{ _('Time limit: %(min)s min', min=(s.time_limit // 60)) }}
                 {% else %}
-                    — No time limit
+                    — {{ _('No time limit') }}
                 {% endif %}
-                <a href="{{ url_for('quiz.session_detail', session_id=s.id) }}">View details</a>
+                <a href="{{ url_for('quiz.session_detail', session_id=s.id) }}">{{ _('View details') }}</a>
             </li>
         {% endfor %}
     </ul>
 {% else %}
-    <p>No quiz sessions yet. <a href="{{ url_for('quiz.list_banks') }}">Start your first quiz</a>.</p>
+    <p>{{ _('No quiz sessions yet.') }} <a href="{{ url_for('quiz.list_banks') }}">{{ _('Start your first quiz') }}</a>.</p>
 {% endif %}
 
-<a href="{{ url_for('quiz.index') }}">Back to Dashboard</a>
+<a href="{{ url_for('quiz.index') }}">{{ _('Back to Dashboard') }}</a>
 {% endblock %}

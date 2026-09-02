@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
-{% block title %}Usage Analytics — Provr{% endblock %}
+{% block title %}{{ _('Usage Analytics — Provr') }}{% endblock %}
 
 {% block content %}
 <div class="admin-container">
     <div class="admin-header">
-        <h1>Admin Control Panel</h1>
-        <p class="subtitle">System overview, metrics, and security audits</p>
+        <h1>{{ _('Admin Control Panel') }}</h1>
+        <p class="subtitle">{{ _('System overview, metrics, and security audits') }}</p>
     </div>
 
     <!-- Admin Sub-navigation -->
     <div class="admin-tabs">
-        <a href="{{ url_for('admin.dashboard') }}" class="tab-btn">Overview</a>
-        <a href="{{ url_for('admin.analytics') }}" class="tab-btn active">Usage Analytics</a>
-        <a href="{{ url_for('admin.performance') }}" class="tab-btn">User Performance</a>
-        <a href="{{ url_for('admin.moderation') }}" class="tab-btn">Content Security</a>
+        <a href="{{ url_for('admin.dashboard') }}" class="tab-btn">{{ _('Overview') }}</a>
+        <a href="{{ url_for('admin.analytics') }}" class="tab-btn active">{{ _('Usage Analytics') }}</a>
+        <a href="{{ url_for('admin.performance') }}" class="tab-btn">{{ _('User Performance') }}</a>
+        <a href="{{ url_for('admin.moderation') }}" class="tab-btn">{{ _('Content Security') }}</a>
     </div>
 
     <!-- Charts Layout Grid -->
     <div class="charts-grid">
         <!-- 1. Cumulative User Growth -->
         <div class="chart-card">
-            <h3>Cumulative User Growth</h3>
+            <h3>{{ _('Cumulative User Growth') }}</h3>
             <div class="chart-container">
                 <canvas id="growthChart"></canvas>
             </div>
@@ -29,7 +29,7 @@
 
         <!-- 2. Daily User Registrations -->
         <div class="chart-card">
-            <h3>New User Registrations (Daily)</h3>
+            <h3>{{ _('New User Registrations (Daily)') }}</h3>
             <div class="chart-container">
                 <canvas id="newUsersChart"></canvas>
             </div>
@@ -37,7 +37,7 @@
 
         <!-- 3. Question Banks per User -->
         <div class="chart-card">
-            <h3>Question Banks per User</h3>
+            <h3>{{ _('Question Banks per User') }}</h3>
             <div class="chart-container">
                 <canvas id="banksChart"></canvas>
             </div>
@@ -45,7 +45,7 @@
 
         <!-- 4. Quizzes Conducted per Week per User -->
         <div class="chart-card">
-            <h3>Quizzes Completed per Week</h3>
+            <h3>{{ _('Quizzes Completed per Week') }}</h3>
             <div class="chart-container">
                 <canvas id="quizzesChart"></canvas>
             </div>
@@ -94,7 +94,7 @@
             data: {
                 labels: growthData.map(item => item.date),
                 datasets: [{
-                    label: 'Total Users',
+                    label: '{{ _("Total Users") }}',
                     data: growthData.map(item => item.count),
                     borderColor: primaryColor,
                     backgroundColor: 'rgba(108, 99, 255, 0.15)',
@@ -121,7 +121,7 @@
             data: {
                 labels: newUsersData.map(item => item.date),
                 datasets: [{
-                    label: 'New Users',
+                    label: '{{ _("New Users") }}',
                     data: newUsersData.map(item => item.count),
                     backgroundColor: '#10b981',
                     borderRadius: 4,
@@ -144,7 +144,7 @@
             data: {
                 labels: banksPerUserData.map(item => item.username),
                 datasets: [{
-                    label: 'Question Banks',
+                    label: '{{ _("Question Banks") }}',
                     data: banksPerUserData.map(item => item.count),
                     backgroundColor: 'rgba(245, 158, 11, 0.85)',
                     hoverBackgroundColor: '#f59e0b',

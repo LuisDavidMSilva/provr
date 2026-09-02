@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Question {{ current }}/{{ total }} - Provr{% endblock %}
+{% block title %}{% trans current=current, total=total %}Question {{ current }}/{{ total }} - Provr{% endtrans %}{% endblock %}
 
 {% block content %}
-<p>Question {{ current }} of {{ total }}</p>
+<p>{% trans current=current, total=total %}Question {{ current }} of {{ total }}{% endtrans %}</p>
 
-<p>⏱ Time Remaining: <span id="timer" data-limit="{{ time_limit }}" data-started="{{ started_at_ts }}"></span></p>
+<p>⏱ {{ _('Time Remaining:') }} <span id="timer" data-limit="{{ time_limit }}" data-started="{{ started_at_ts }}"></span></p>
 
 <h3 class="question-text">{{ question.text }}</h3>
 
@@ -19,6 +19,6 @@
         </div>
     {% endfor %}
 
-    <button type="submit">Next</button>
+    <button type="submit">{{ _('Next') }}</button>
 </form>
 {% endblock %}

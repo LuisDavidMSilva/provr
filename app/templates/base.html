@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() }}">
 
 <head>
     <meta charset="UTF-8">
@@ -17,24 +17,35 @@
         <a href="{{ url_for('quiz.index') }}" class="navbar-brand">
             <img src="{{ url_for('static', filename='img/provr_logo.svg') }}" alt="Provr" height="36">
         </a>
-        <div class="navbar-links">
+        <div class="navbar-links" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
             {% if current_user.is_authenticated %}
-            <a href="{{ url_for('quiz.index') }}">Dashboard</a>
-            <a href="{{ url_for('auth.change_password') }}">Change Password</a>
-            <a href="{{ url_for('auth.update_picture') }}">Update Picture</a>
-            <a href="{{ url_for('auth.recovery_key') }}">Recovery Key</a>
-            <a href="{{ url_for('quiz.list_banks') }}">My Banks</a>
-            <a href="{{ url_for('quiz.history') }}">My Results</a>
+            <a href="{{ url_for('quiz.index') }}">{{ _('Dashboard') }}</a>
+            <a href="{{ url_for('auth.change_password') }}">{{ _('Change Password') }}</a>
+            <a href="{{ url_for('auth.update_picture') }}">{{ _('Update Picture') }}</a>
+            <a href="{{ url_for('auth.recovery_key') }}">{{ _('Recovery Key') }}</a>
+            <a href="{{ url_for('quiz.list_banks') }}">{{ _('My Banks') }}</a>
+            <a href="{{ url_for('quiz.history') }}">{{ _('My Results') }}</a>
             {% if current_user.is_admin %}
-            <a href="{{ url_for('admin.dashboard') }}" style="color: #6c63ff; font-weight: bold; border: 1px solid #6c63ff; padding: 2px 8px; border-radius: 4px;">Admin Panel</a>
+            <a href="{{ url_for('admin.dashboard') }}" style="color: #6c63ff; font-weight: bold; border: 1px solid #6c63ff; padding: 2px 8px; border-radius: 4px;">{{ _('Admin Panel') }}</a>
             {% endif %}
-            <a href="{{ url_for('auth.logout') }}">Logout</a>
+            <a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}">{{ _('Login') }}</a>
+            <a href="{{ url_for('auth.register') }}">{{ _('Register') }}</a>
+            {% endif %}
+
+            <!-- Language Selector -->
+            <div class="lang-selector" style="display: inline-block; position: relative;">
+                <select onchange="location = this.value;" style="background: var(--surface-alt); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.9rem;">
+                    <option value="{{ url_for('auth.set_language', lang_code='en') }}" {% if get_locale() == 'en' %}selected{% endif %}>🇺🇸 EN</option>
+                    <option value="{{ url_for('auth.set_language', lang_code='pt_BR') }}" {% if get_locale() == 'pt_BR' %}selected{% endif %}>🇧🇷 PT</option>
+                    <option value="{{ url_for('auth.set_language', lang_code='es') }}" {% if get_locale() == 'es' %}selected{% endif %}>🇪🇸 ES</option>
+                </select>
+            </div>
+
+            {% if current_user.is_authenticated %}
             <img src="{{ url_for('static', filename=current_user.profile_picture) if current_user.profile_picture else url_for('static', filename='uploads/default.jpg') }}"
                 alt="{{ current_user.username }}" class="profile-pic">
-
-            {% else %}
-            <a href="{{ url_for('auth.login') }}">Login</a>
-            <a href="{{ url_for('auth.register') }}">Register</a>
             {% endif %}
         </div>
     </nav>
@@ -54,8 +65,8 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
     <footer>
-        <p>© 2026 Provr — Portfolio project by <a href="https://github.com/LuisDavidMSilva">Luis David</a>. <a
-                href="{{ url_for('terms') }}">Terms of Use</a></p>
+        <p>© 2026 Provr — {% trans name="Luis David" %}Portfolio project by <a href="https://github.com/LuisDavidMSilva">{{ name }}</a>{% endtrans %}. <a
+                href="{{ url_for('terms') }}">{{ _('Terms of Use') }}</a></p>
     </footer>
 </body>
 
