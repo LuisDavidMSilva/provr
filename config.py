@@ -24,10 +24,12 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    ENV = 'development'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///provr_dev.db'
 
 class ProductionConfig(Config):
     DEBUG = False
+    ENV =  'production'
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     RATELIMIT_STORAGE_URI = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 
